@@ -43,7 +43,7 @@ export const THEMES = [
     anchor: { moods: ['闲适', '宁静', '释然'], aura: ['空灵', '禅意'] } },
 ]
 
-/** 随机抽一张寻物令（换签用，排除已看过/锦囊里已有的） */
+/** 随机抽一张寻物令（换签用，优先避开刚刚看过的签） */
 export function drawTheme(exclude = []) {
   const ex = new Set(exclude)
   const pool = THEMES.filter((t) => !ex.has(t.id))
@@ -66,9 +66,9 @@ export const ONBOARDING = [
 export const COPY = {
   opening: '你来啦。今天，我想请你陪我找一样东西——',
   reroll: '这张不太合你呀？那再看看下一张～',
-  accept: '收进锦囊',
+  accept: '接下今日签',
   redraw: '换一张',
-  jinnangEmpty: '锦囊还空着。先去领一道寻物令，装进来吧。',
+  todayDone: '今天的小满印已经拿到啦。',
   hesitate: '不用急着决定。有些美好，是要多看它两眼，才认得出来的。',
   // 找到诗之后，问用户要不要收
   keepAsk: '它好像真的打动你了。要把这张照片装进明信片，收进诗笺夹吗？',

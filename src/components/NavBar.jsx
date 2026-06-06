@@ -3,7 +3,6 @@ import './NavBar.css'
 
 const TABS = [
   { to: '/home', ico: '✦', label: '今日' },
-  { to: '/nang', ico: '☉', label: '锦囊' },
   { to: '/shiji', ico: '▧', label: '诗笺夹' },
   { to: '/calendar', label: '日历' },
 ]

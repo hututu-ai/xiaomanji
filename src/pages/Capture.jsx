@@ -7,7 +7,7 @@ import PoemCard from '../components/PoemCard.jsx'
 import LoadingDots from '../components/LoadingDots.jsx'
 import { getThemeById, COPY } from '../data/themes.js'
 import { defaultCardLayout } from '../data/layouts.js'
-import { compressImageToDataURL, addJian, removeFromJinnang, solarTerm } from '../services/storage.js'
+import { compressImageToDataURL, addJian, clearTodaySign, solarTerm } from '../services/storage.js'
 import { matchPoem } from '../services/ai.js'
 import './Capture.css'
 
@@ -16,7 +16,6 @@ export default function Capture() {
   const { state } = useLocation()
   const navigate = useNavigate()
   const theme = getThemeById(themeId)
-  const nangId = state?.nangId
   const sampleUrl = state?.sampleUrl
   const sampleLabel = state?.sampleLabel
 
@@ -85,7 +84,7 @@ export default function Capture() {
     return (
       <div className="page capture" style={{ justifyContent: 'center', alignItems: 'center' }}>
         <p style={{ color: 'var(--ink-soft)' }}>这道寻物令找不到了。</p>
-        <button className="btn-ghost" onClick={() => navigate('/home')}>回去领一道</button>
+        <button className="btn-ghost" onClick={() => navigate('/home')}>回今日签</button>
       </div>
     )
   }
@@ -110,7 +109,7 @@ export default function Capture() {
       postscript: postscript.trim(),
       solarTerm: solarTerm(),
     })
-    if (nangId) removeFromJinnang(nangId)
+    clearTodaySign()
     setStep('done')
   }
 
@@ -209,7 +208,7 @@ export default function Capture() {
             <PoemCard jian={savedRef.current} savable />
             <div className="cap-done-btns">
               <button className="btn-primary" onClick={() => navigate('/shiji')}>去诗笺夹看看</button>
-              <button className="btn-ghost" onClick={() => navigate('/home')}>再领一道寻物令</button>
+              <button className="btn-ghost" onClick={() => navigate('/home')}>回今日</button>
             </div>
           </motion.div>
         )}

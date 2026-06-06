@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小满集易拉宝 V2 · 80cm × 200cm</title>
+<style>
+  @font-face {
+    font-family: "JiangxiZhuokai";
+    src: url("assets/jiangxi-zhuokai.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @page {
+    size: 80cm 200cm;
+    margin: 0;
+  }
+  @media print {
+    html,
+    body {
+      width: 80cm;
+      height: 200cm;
+      padding: 0;
+      background: #fff;
+    }
+    .banner {
+      width: 80cm;
+      height: 200cm;
+      box-shadow: none;
+    }
+  }
+
+  :root {
+    --paper: #f6f3ec;
+    --paper-card: #fcfaf4;
+    --green-100: #e4f4ee;
+    --green-300: #a6ddcd;
+    --green-500: #5cc1a8;
+    --green-700: #46a98f;
+    --pink-100: #fbe7e9;
+    --pink-300: #f4c4cb;
+    --pink-500: #e79aa6;
+    --blue-200: #cfe1e6;
+    --blue-400: #9cc2cd;
+    --gold: #d9b46a;
+    --gold-soft: #ecd9a8;
+    --ink: #3a3a34;
+    --ink-soft: #6b675e;
+    --ink-faint: #9a958a;
+    --font-main: "JiangxiZhuokai", "Songti SC", "STSong", serif;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    background: #d8ded9;
+    color: var(--ink);
+    font-family: var(--font-main);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .banner {
+    position: relative;
+    width: 800px;
+    height: 2000px;
+    overflow: hidden;
+    background:
+      radial-gradient(92% 30% at 50% 0%, rgba(228, 244, 238, 0.96) 0%, rgba(246, 243, 236, 0) 72%),
+      radial-gradient(70% 28% at 12% 38%, rgba(251, 231, 233, 0.72) 0%, rgba(246, 243, 236, 0) 74%),
+      radial-gradient(75% 28% at 94% 67%, rgba(207, 225, 230, 0.60) 0%, rgba(246, 243, 236, 0) 72%),
+      radial-gradient(70% 22% at 36% 94%, rgba(236, 217, 168, 0.44) 0%, rgba(246, 243, 236, 0) 72%),
+      linear-gradient(158deg, #dcefe8 0%, #f4f7f2 29%, #fcfaf4 51%, #fbeef0 76%, #f6f3ec 100%);
+    box-shadow: 0 24px 70px rgba(58, 58, 52, 0.18);
+  }
+
+  .banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.50;
+    background-image:
+      linear-gradient(90deg, rgba(58, 58, 52, 0.016) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(58, 58, 52, 0.014) 1px, transparent 1px);
+    background-size: 8px 8px, 10px 10px;
+  }
+
+  .banner::after {
+    content: "";
+    position: absolute;
+    inset: 20px;
+    z-index: 2;
+    pointer-events: none;
+    border: 1.5px solid rgba(217, 180, 106, 0.44);
+    box-shadow: inset 0 0 86px rgba(70, 169, 143, 0.07);
+  }
+
+  .section,
+  .footer {
+    position: relative;
+    z-index: 4;
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+
+  .vine {
+    position: absolute;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.72;
+  }
+
+  .vine svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .vine.left {
+    width: 160px;
+    height: 132px;
+    left: 50px;
+    top: 80px;
+    transform: rotate(-11deg);
+  }
+
+  .vine.right {
+    width: 160px;
+    height: 132px;
+    right: 48px;
+    top: 102px;
+    transform: rotate(12deg) scaleX(-1);
+  }
+
+  .brand {
+    padding-top: 56px;
+    text-align: center;
+  }
+
+  .wordmark {
+    font-size: 64px;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;
+    color: var(--green-700);
+  }
+
+  .brand-line {
+    width: 168px;
+    height: 2px;
+    margin: 18px auto 0;
+    background: linear-gradient(90deg, transparent, rgba(70, 169, 143, 0.72), transparent);
+  }
+
+  .hero {
+    margin-top: 42px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 25px;
+    line-height: 1.35;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+
+  .headline {
+    margin-top: 16px;
+    font-size: 62px;
+    line-height: 1.18;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+
+  .headline .green {
+    color: var(--green-700);
+  }
+
+  .headline .pink {
+    color: var(--pink-500);
+  }
+
+  .hero-copy {
+    width: 590px;
+    margin: 20px auto 0;
+    font-size: 20px;
+    line-height: 1.68;
+    color: var(--ink-soft);
+  }
+
+  .hero-stage {
+    position: relative;
+    width: 600px;
+    height: 418px;
+    margin: 20px auto 0;
+  }
+
+  .photo-wash {
+    position: absolute;
+    left: 50%;
+    top: 40px;
+    width: 468px;
+    height: 334px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(252, 250, 244, 0.92) 0%, rgba(252, 250, 244, 0.74) 46%, rgba(252, 250, 244, 0) 74%),
+      radial-gradient(ellipse at 50% 84%, rgba(217, 180, 106, 0.18) 0%, rgba(217, 180, 106, 0) 68%);
+  }
+
+  .mascot {
+    position: absolute;
+    left: 50%;
+    top: -12px;
+    width: 420px;
+    transform: translateX(-50%);
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(ellipse 58% 58% at 50% 50%, #000 0 68%, rgba(0, 0, 0, 0.78) 78%, transparent 90%);
+    mask-image: radial-gradient(ellipse 58% 58% at 50% 50%, #000 0 68%, rgba(0, 0, 0, 0.78) 78%, transparent 90%);
+    filter: drop-shadow(0 24px 26px rgba(217, 180, 106, 0.15));
+  }
+
+  .thought {
+    position: absolute;
+    width: 174px;
+    padding: 13px 16px;
+    background: rgba(252, 250, 244, 0.86);
+    border: 1.4px solid rgba(217, 180, 106, 0.50);
+    border-radius: 14px;
+    box-shadow: 0 10px 26px rgba(58, 58, 52, 0.08);
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.48;
+    color: var(--ink-soft);
+  }
+
+  .thought strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--green-700);
+    font-size: 17px;
+    font-weight: 400;
+  }
+
+  .thought.left {
+    left: 0;
+    top: 128px;
+    transform: rotate(-5deg);
+  }
+
+  .thought.right {
+    right: 0;
+    top: 204px;
+    transform: rotate(5deg);
+  }
+
+  .thesis {
+    margin-top: 24px;
+  }
+
+  .thesis-panel {
+    padding: 22px 30px;
+    background: rgba(252, 250, 244, 0.76);
+    border: 1.5px solid rgba(166, 221, 205, 0.74);
+    border-radius: 20px;
+    box-shadow: 0 4px 0 rgba(166, 221, 205, 0.22);
+    text-align: center;
+  }
+
+  .thesis-title {
+    font-size: 30px;
+    line-height: 1.35;
+    color: var(--green-700);
+  }
+
+  .thesis-text {
+    margin-top: 9px;
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--ink-soft);
+  }
+
+  .journey {
+    margin-top: 34px;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-size: 34px;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .section-title::before,
+  .section-title::after {
+    content: "";
+    width: 34px;
+    height: 1.5px;
+    background: rgba(70, 169, 143, 0.62);
+  }
+
+  .path {
+    position: relative;
+    margin-top: 22px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .path::before {
+    content: "";
+    position: absolute;
+    top: 34px;
+    bottom: 34px;
+    left: 58px;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(70, 169, 143, 0), rgba(70, 169, 143, 0.62), rgba(217, 180, 106, 0.52), rgba(70, 169, 143, 0));
+  }
+
+  .path-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 116px 1fr;
+    gap: 18px;
+    align-items: center;
+    min-height: 118px;
+    padding: 16px 22px 16px 0;
+  }
+
+  .step-mark {
+    position: relative;
+    z-index: 2;
+    width: 116px;
+    height: 116px;
+    display: grid;
+    place-items: center;
+  }
+
+  .step-mark::before {
+    content: "";
+    position: absolute;
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background: rgba(252, 250, 244, 0.94);
+    border: 1.6px solid rgba(217, 180, 106, 0.58);
+    box-shadow: 0 5px 0 rgba(217, 180, 106, 0.16);
+  }
+
+  .step-number {
+    position: relative;
+    z-index: 3;
+    font-size: 40px;
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  .path-copy {
+    padding: 17px 22px 18px;
+    background: rgba(252, 250, 244, 0.72);
+    border: 1.3px solid rgba(166, 221, 205, 0.62);
+    border-radius: 18px;
+    box-shadow: 0 4px 0 rgba(166, 221, 205, 0.16);
+  }
+
+  .path-title {
+    font-size: 25px;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .path-desc {
+    margin-top: 7px;
+    font-size: 16px;
+    line-height: 1.54;
+    color: var(--ink-soft);
+  }
+
+  .prompts {
+    margin-top: 28px;
+  }
+
+  .prompt-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    color: var(--green-700);
+    font-size: 31px;
+    line-height: 1.25;
+  }
+
+  .prompt-sub {
+    margin-top: 8px;
+    text-align: center;
+    font-size: 15px;
+    color: var(--ink-faint);
+  }
+
+  .prompt-grid {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .prompt {
+    min-height: 78px;
+    padding: 12px 14px;
+    background: rgba(252, 250, 244, 0.78);
+    border: 1.2px solid rgba(231, 154, 166, 0.35);
+    border-radius: 15px;
+    box-shadow: 0 4px 0 rgba(231, 154, 166, 0.12);
+  }
+
+  .prompt-name {
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1.25;
+  }
+
+  .prompt-hint {
+    margin-top: 5px;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    line-height: 1.42;
+  }
+
+  .closing {
+    margin-top: 30px;
+  }
+
+  .closing-panel {
+    display: grid;
+    grid-template-columns: 1fr 210px;
+    gap: 24px;
+    align-items: center;
+    padding: 24px 28px;
+    background: rgba(252, 250, 244, 0.78);
+    border: 1.5px solid rgba(217, 180, 106, 0.54);
+    border-radius: 22px;
+    box-shadow: 0 4px 0 rgba(217, 180, 106, 0.18);
+  }
+
+  .closing-title {
+    font-size: 31px;
+    line-height: 1.34;
+    color: var(--ink);
+  }
+
+  .closing-title span {
+    color: var(--pink-500);
+  }
+
+  .closing-text {
+    margin-top: 8px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .mini-postcard {
+    min-height: 150px;
+    padding: 16px 14px;
+    background: rgba(246, 243, 236, 0.82);
+    border: 1.4px solid rgba(166, 221, 205, 0.72);
+    border-radius: 16px;
+    color: var(--ink-soft);
+  }
+
+  .postcard-photo {
+    height: 62px;
+    border-radius: 12px;
+    background:
+      radial-gradient(ellipse at 25% 38%, rgba(231, 154, 166, 0.36), transparent 58%),
+      radial-gradient(ellipse at 74% 62%, rgba(92, 193, 168, 0.34), transparent 60%),
+      rgba(252, 250, 244, 0.82);
+    border: 1px solid rgba(217, 180, 106, 0.38);
+  }
+
+  .postcard-line {
+    height: 9px;
+    margin-top: 12px;
+    border-radius: 999px;
+    background: rgba(107, 103, 94, 0.16);
+  }
+
+  .postcard-line.short {
+    width: 64%;
+  }
+
+  .footer {
+    margin-top: 26px;
+  }
+
+  .footer-panel {
+    display: grid;
+    grid-template-columns: 1fr 118px;
+    gap: 18px;
+    align-items: center;
+    padding: 16px 20px 16px 24px;
+    background: rgba(252, 250, 244, 0.78);
+    border: 1.5px solid rgba(166, 221, 205, 0.70);
+    border-radius: 18px;
+    box-shadow: 0 4px 0 rgba(166, 221, 205, 0.18);
+  }
+
+  .footer-main {
+    font-size: 24px;
+    line-height: 1.3;
+    color: var(--green-700);
+  }
+
+  .footer-sub {
+    margin-top: 4px;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+
+  .qr {
+    width: 104px;
+    height: 104px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    border: 1.5px dashed rgba(70, 169, 143, 0.62);
+    color: var(--green-700);
+    background:
+      linear-gradient(90deg, rgba(58, 58, 52, 0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(58, 58, 52, 0.08) 1px, transparent 1px),
+      rgba(255, 255, 255, 0.64);
+    background-size: 13px 13px;
+    font-size: 13px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<main class="banner" aria-label="小满集易拉宝第二版">
+  <div class="vine left" aria-hidden="true">
+    <svg viewBox="0 0 160 132">
+      <path d="M18 112 C45 72, 76 42, 132 16" fill="none" stroke="#46a98f" stroke-width="3" stroke-linecap="round" opacity="0.34"/>
+      <path d="M52 66 C40 50, 30 43, 18 41 C22 57, 34 68, 50 72" fill="#e4f4ee" stroke="#5cc1a8" stroke-width="2" opacity="0.70"/>
+      <path d="M86 40 C78 24, 66 16, 54 14 C57 31, 70 43, 84 47" fill="#fbe7e9" stroke="#e79aa6" stroke-width="2" opacity="0.72"/>
+      <path d="M119 21 C116 8, 107 0, 97 -4 C94 11, 101 23, 116 29" fill="#ecd9a8" stroke="#d9b46a" stroke-width="2" opacity="0.76"/>
+    </svg>
+  </div>
+  <div class="vine right" aria-hidden="true">
+    <svg viewBox="0 0 160 132">
+      <path d="M18 112 C45 72, 76 42, 132 16" fill="none" stroke="#46a98f" stroke-width="3" stroke-linecap="round" opacity="0.34"/>
+      <path d="M52 66 C40 50, 30 43, 18 41 C22 57, 34 68, 50 72" fill="#e4f4ee" stroke="#5cc1a8" stroke-width="2" opacity="0.70"/>
+      <path d="M86 40 C78 24, 66 16, 54 14 C57 31, 70 43, 84 47" fill="#fbe7e9" stroke="#e79aa6" stroke-width="2" opacity="0.72"/>
+      <path d="M119 21 C116 8, 107 0, 97 -4 C94 11, 101 23, 116 29" fill="#ecd9a8" stroke="#d9b46a" stroke-width="2" opacity="0.76"/>
+    </svg>
+  </div>
+
+  <section class="section brand">
+    <h1 class="wordmark">小满集</h1>
+    <div class="brand-line"></div>
+  </section>
+
+  <section class="section hero">
+    <div class="eyebrow">每天仍有一点好看的东西，悄悄发生</div>
+    <div class="headline">用生活的<span class="green">小美满</span><br>对抗世界的<span class="pink">大虚无</span></div>
+    <p class="hero-copy">小满每天给你一道寻物令。你去拍下被忽略的一点好，它从真实诗库里找一首旧诗，替这一刻留下一张诗笺。</p>
+    <div class="hero-stage">
+      <div class="photo-wash"></div>
+      <img class="mascot" src="assets/xiaoman-camera.png" alt="拿着相机的小满">
+      <div class="thought left"><strong>先看见</strong>不是拍漂亮照片，而是重新把眼光放回生活。</div>
+      <div class="thought right"><strong>再留下</strong>照片、古诗和你的跋，一起成为未来的证据。</div>
+    </div>
+  </section>
+
+  <section class="section thesis">
+    <div class="thesis-panel">
+      <div class="thesis-title">小满集不是相册，也不是诗词工具</div>
+      <p class="thesis-text">它是一只陪你练习观看的小瑞兽：把“今天有什么值得看”变成一个温柔的动作。</p>
+    </div>
+  </section>
+
+  <section class="section journey">
+    <h2 class="section-title">一张诗笺如何诞生</h2>
+    <div class="path">
+      <div class="path-step">
+        <div class="step-mark"><div class="step-number">一</div></div>
+        <div class="path-copy">
+          <div class="path-title">把注意力从虚无里牵回来</div>
+          <p class="path-desc">寻物令不是打卡题目，而是一种观看提示：去找光、热饮、角落、作品、眼神，找那些“小但确实存在”的满足。</p>
+        </div>
+      </div>
+      <div class="path-step">
+        <div class="step-mark"><div class="step-number">二</div></div>
+        <div class="path-copy">
+          <div class="path-title">让古诗接住这一刻</div>
+          <p class="path-desc">AI 负责读懂画面，再从核验过的真实诗库中匹配古诗。它不编造诗意，只替你和古人牵线。</p>
+        </div>
+      </div>
+      <div class="path-step">
+        <div class="step-mark"><div class="step-number">三</div></div>
+        <div class="path-copy">
+          <div class="path-title">把看见变成可以带走的东西</div>
+          <p class="path-desc">照片、题诗、出处、共鸣话和你的跋落成一张诗笺，收进诗笺夹。以后再看见它，就想起那天你没有错过。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section prompts">
+    <h2 class="prompt-title">现场可以这样开始</h2>
+    <div class="prompt-sub">六道寻物令，让每个人用不同眼光重新看见同一个空间</div>
+    <div class="prompt-grid">
+      <div class="prompt">
+        <div class="prompt-name">一杯热饮</div>
+        <div class="prompt-hint">停一下，好好看它一眼</div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-name">一束光</div>
+        <div class="prompt-hint">窗光、灯光、屏幕的光</div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-name">用心之物</div>
+        <div class="prompt-hint">别人作品里藏着的小心思</div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-name">一个角落</div>
+        <div class="prompt-hint">有人在这里用了一点心</div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-name">一句话</div>
+        <div class="prompt-hint">便利贴、白板、名牌上的字</div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-name">眼里的光</div>
+        <div class="prompt-hint">一张正在发亮的脸</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section closing">
+    <div class="closing-panel">
+      <div>
+        <div class="closing-title">照片不是终点，<span>诗笺</span>才是</div>
+        <p class="closing-text">小满集想保存的不是“我拍过什么”，而是“我曾经认真看见过什么”。</p>
+      </div>
+      <div class="mini-postcard" aria-hidden="true">
+        <div class="postcard-photo"></div>
+        <div class="postcard-line"></div>
+        <div class="postcard-line short"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-panel">
+      <div>
+        <div class="footer-main">扫码领取今天的寻物令</div>
+        <div class="footer-sub">完成一次寻找，带走一张属于你的诗笺</div>
+      </div>
+      <div class="qr">二维码位</div>
+    </div>
+  </footer>
+</main>
+</body>
+</html>

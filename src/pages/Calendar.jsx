@@ -53,7 +53,7 @@ export default function Calendar() {
         <button className="cal-nav" onClick={() => shift(1)} disabled={isThisMonth}>›</button>
       </header>
 
-      <p className="cal-stat">这个月，你认真看过世界 <b>{recorded}</b> 天</p>
+      <p className="cal-stat">这个月，你拿到小满印 <b>{recorded}</b> 天</p>
 
       <div className="cal-table">
         <div className="cal-week">{WEEK.map((w) => <div key={w} className="cal-wd">{w}</div>)}</div>
@@ -84,7 +84,7 @@ export default function Calendar() {
           <span className="cal-poets-n">{poets.length} 位</span>
         </div>
         {poets.length === 0 ? (
-          <p className="cal-poets-empty">还没遇见谁——去拍一张，让小满替你牵一首诗。</p>
+          <p className="cal-poets-empty">还没遇见谁——完成今日签，小满会替你牵一首诗，也在日历盖上今天的印。</p>
         ) : (
           <div className="cal-poets-row no-scrollbar">
             {poets.map((p) => (

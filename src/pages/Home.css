@@ -23,7 +23,7 @@
   letter-spacing: 0.24em;
   color: var(--accent);
 }
-.h2-nang {
+.h2-status {
   font-size: 14px;
   color: var(--ink-soft);
   letter-spacing: 0.06em;
@@ -31,6 +31,15 @@
   border: 1px solid var(--green-300);
   border-radius: 999px;
   background: rgba(252, 250, 244, 0.6);
+}
+.h2-status.pending {
+  color: var(--gold);
+  border-color: rgba(217, 180, 106, 0.52);
+}
+.h2-status.done {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
 }
 
 .h2-xm-strip {
@@ -148,6 +157,53 @@
   justify-content: center;
   gap: 14px;
   padding: 8px 0;
+}
+.h2-pending {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 42px 11px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(217, 180, 106, 0.45);
+  background: rgba(253, 248, 237, 0.86);
+  box-shadow: var(--shadow-soft);
+}
+.h2-pending div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.h2-pending strong {
+  font-size: 14px;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+.h2-pending span {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.h2-pending button {
+  flex: 0 0 auto;
+  padding: 6px 13px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--gold);
+  font-size: 13px;
+}
+.h2-pending .h2-pending-x {
+  position: absolute;
+  right: 10px;
+  top: 9px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  color: var(--ink-faint);
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
 }
 .h2-say {
   margin: 0;

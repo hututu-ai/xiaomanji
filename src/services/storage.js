@@ -1,12 +1,12 @@
 // ─────────────────────────────────────────────────────────────────────────────
-//  本地持久化（localStorage）。三处数据：诗笺夹条目(照片嵌在卡面 + 版式配方) / 锦囊(待完成寻物令) / 派生统计。
+//  本地持久化（localStorage）。三处数据：诗笺夹条目 / 今日未完成签 / 派生统计。
 //  未来换后端只需替换这些函数实现，接口不变。
 // ─────────────────────────────────────────────────────────────────────────────
 import imageCompression from 'browser-image-compression'
 import { poetRelation } from '../data/poems.js'
 
 const K_JIAN = 'xmj_jian_v1' // 诗笺夹：已完成任务的卡面与版式配方
-const K_NANG = 'xmj_jinnang_v1' // 锦囊：收下但未完成的寻物令
+const K_TODAY = 'xmj_today_sign_v1' // 今日签：当天未完成才保留，过日作废
 
 function read(key) {
   try {
@@ -14,6 +14,14 @@ function read(key) {
     return Array.isArray(v) ? v : []
   } catch {
     return []
+  }
+}
+function readObj(key) {
+  try {
+    const v = JSON.parse(localStorage.getItem(key) || 'null')
+    return v && typeof v === 'object' && !Array.isArray(v) ? v : null
+  } catch {
+    return null
   }
 }
 function write(key, list) {
@@ -25,10 +33,26 @@ function write(key, list) {
     return false
   }
 }
+function writeObj(key, value) {
+  try {
+    if (!value) localStorage.removeItem(key)
+    else localStorage.setItem(key, JSON.stringify(value))
+    return true
+  } catch (e) {
+    console.error('保存失败（可能容量已满）', e)
+    return false
+  }
+}
 const uid = () =>
   typeof crypto !== 'undefined' && crypto.randomUUID
     ? crypto.randomUUID()
     : String(Date.now()) + Math.random().toString(16).slice(2)
+
+function dayKey(date = new Date()) {
+  const d = date
+  const p = (n) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
+}
 
 // ——— 诗笺夹（照片嵌在明信片/票券/书笺里）———
 export function getJian() {
@@ -46,12 +70,17 @@ export function deleteJian(id) {
   return getJian()
 }
 
-// ——— 锦囊（待完成寻物令）———
-export function getJinnang() {
-  return read(K_NANG).sort((a, b) => b.acceptedAt - a.acceptedAt)
+// ——— 今日签（当天未完成签；过日作废，不补签）———
+export function getTodaySign(date = new Date()) {
+  const rec = readObj(K_TODAY)
+  if (!rec) return null
+  if (rec.dayKey !== dayKey(date)) {
+    writeObj(K_TODAY, null)
+    return null
+  }
+  return rec
 }
-export function addToJinnang(theme) {
-  const list = read(K_NANG)
+export function setTodaySign(theme, date = new Date()) {
   const rec = {
     id: uid(),
     themeId: theme.id,
@@ -59,15 +88,14 @@ export function addToJinnang(theme) {
     hint: theme.hint,
     type: theme.type,
     accent: theme.accent,
+    dayKey: dayKey(date),
     acceptedAt: Date.now(),
   }
-  list.unshift(rec)
-  write(K_NANG, list)
+  writeObj(K_TODAY, rec)
   return rec
 }
-export function removeFromJinnang(id) {
-  write(K_NANG, read(K_NANG).filter((r) => r.id !== id))
-  return getJinnang()
+export function clearTodaySign() {
+  writeObj(K_TODAY, null)
 }
 
 // ——— 打卡日历：按完成日期统计 ———

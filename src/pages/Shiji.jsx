@@ -42,7 +42,7 @@ export default function Shiji() {
       {items.length === 0 ? (
         <div className="sj-empty">
           <div className="sj-empty-art">❖</div>
-          <p>诗笺夹还空着呢。<br />去领一道寻物令，拍下你找到的东西，让小满把它装进一张明信片。</p>
+          <p>诗笺夹还空着呢。<br />去完成今日签，拍下你找到的东西，让小满把它装进一张明信片。</p>
           <button className="btn-primary" onClick={() => navigate('/home')}>去找找看</button>
         </div>
       ) : (

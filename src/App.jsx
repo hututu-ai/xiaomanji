@@ -3,7 +3,6 @@ import { AnimatePresence } from 'framer-motion'
 import Cover from './pages/Cover.jsx'
 import Onboarding from './pages/Onboarding.jsx'
 import Home from './pages/Home.jsx'
-import Nang from './pages/Nang.jsx'
 import Capture from './pages/Capture.jsx'
 import Shiji from './pages/Shiji.jsx'
 import Calendar from './pages/Calendar.jsx'
@@ -18,7 +17,6 @@ export default function App() {
           <Route path="/" element={<Cover />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/nang" element={<Nang />} />
           <Route path="/capture/:themeId" element={<Capture />} />
           <Route path="/shiji" element={<Shiji />} />
           <Route path="/calendar" element={<Calendar />} />

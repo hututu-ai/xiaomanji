@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小满集易拉宝 · 80cm × 200cm</title>
+<style>
+  @font-face {
+    font-family: "AlibabaSans";
+    src: url("assets/alibaba-r.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "AlibabaSans";
+    src: url("assets/alibaba-b.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Zhuokai";
+    src: url("assets/zhuokai.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "HuiwenMincho";
+    src: url("assets/huiwen-mincho.woff2") format("woff2");
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @page {
+    size: 80cm 200cm;
+    margin: 0;
+  }
+  @media print {
+    html,
+    body {
+      width: 80cm;
+      height: 200cm;
+      padding: 0;
+      background: #fff;
+    }
+    .banner {
+      width: 80cm;
+      height: 200cm;
+      box-shadow: none;
+    }
+  }
+
+  :root {
+    --paper: #f6f3ec;
+    --paper-soft: #efeadf;
+    --paper-card: #fcfaf4;
+    --green-100: #e4f4ee;
+    --green-300: #a6ddcd;
+    --green-500: #5cc1a8;
+    --green-700: #46a98f;
+    --pink-100: #fbe7e9;
+    --pink-300: #f4c4cb;
+    --pink-500: #e79aa6;
+    --blue-200: #cfe1e6;
+    --blue-400: #9cc2cd;
+    --gold: #d9b46a;
+    --gold-soft: #ecd9a8;
+    --red-seal: #c0473a;
+    --ink: #3a3a34;
+    --ink-soft: #6b675e;
+    --ink-faint: #9a958a;
+    --shadow-soft: rgba(74, 138, 125, 0.14);
+    --shadow-warm: rgba(217, 180, 106, 0.18);
+    --font-song: "HuiwenMincho", "Songti SC", "STSong", serif;
+    --font-display: "Zhuokai", "HuiwenMincho", "Songti SC", serif;
+    --font-sans: "AlibabaSans", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    background: #d6dfda;
+    color: var(--ink);
+    font-family: var(--font-song);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .banner {
+    position: relative;
+    width: 800px;
+    height: 2000px;
+    overflow: hidden;
+    background:
+      radial-gradient(86% 28% at 50% 3%, rgba(228, 244, 238, 0.96) 0%, rgba(246, 243, 236, 0) 74%),
+      radial-gradient(68% 30% at 8% 33%, rgba(251, 231, 233, 0.74) 0%, rgba(246, 243, 236, 0) 76%),
+      radial-gradient(68% 30% at 94% 62%, rgba(207, 225, 230, 0.70) 0%, rgba(246, 243, 236, 0) 72%),
+      radial-gradient(80% 28% at 42% 92%, rgba(236, 217, 168, 0.46) 0%, rgba(246, 243, 236, 0) 70%),
+      linear-gradient(158deg, #dcefe8 0%, #f4f7f2 27%, #fcfaf4 47%, #fbeef0 74%, #f6f3ec 100%);
+    box-shadow: 0 24px 70px rgba(58, 58, 52, 0.18);
+  }
+
+  .banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.58;
+    background-image:
+      linear-gradient(90deg, rgba(58, 58, 52, 0.018) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(58, 58, 52, 0.016) 1px, transparent 1px);
+    background-size: 7px 7px, 9px 9px;
+  }
+
+  .banner::after {
+    content: "";
+    position: absolute;
+    inset: 20px;
+    z-index: 2;
+    pointer-events: none;
+    border: 1.5px solid rgba(217, 180, 106, 0.42);
+    box-shadow:
+      inset 0 0 0 8px rgba(252, 250, 244, 0.18),
+      inset 0 0 80px rgba(70, 169, 143, 0.08);
+  }
+
+  .section,
+  .footer {
+    position: relative;
+    z-index: 4;
+    padding-left: 52px;
+    padding-right: 52px;
+  }
+
+  .top-pattern {
+    position: absolute;
+    top: 32px;
+    left: 36px;
+    right: 36px;
+    height: 390px;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.85;
+  }
+
+  .branch {
+    position: absolute;
+    width: 160px;
+    height: 120px;
+  }
+
+  .branch svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .branch-left {
+    left: 0;
+    top: 34px;
+    transform: rotate(-10deg);
+  }
+
+  .branch-right {
+    right: 0;
+    top: 98px;
+    transform: rotate(12deg) scaleX(-1);
+  }
+
+  .soft-stamp {
+    position: absolute;
+    z-index: 3;
+    width: 320px;
+    height: 320px;
+    object-fit: contain;
+    opacity: 0.065;
+    filter: saturate(0.88);
+  }
+
+  .soft-stamp.one {
+    left: -56px;
+    top: 716px;
+    transform: rotate(-14deg);
+  }
+
+  .soft-stamp.two {
+    right: -72px;
+    bottom: 210px;
+    transform: rotate(18deg);
+  }
+
+  .brand-header {
+    padding-top: 42px;
+    text-align: center;
+  }
+
+  .brand-row {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .wordmark {
+    font-family: var(--font-song);
+    font-size: 66px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
+    color: var(--green-700);
+  }
+
+  .header-seal {
+    width: 56px;
+    height: 56px;
+    margin-top: 0;
+    object-fit: contain;
+    transform: rotate(-5deg);
+  }
+
+  .subwordmark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 10px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    color: var(--ink-faint);
+  }
+
+  .subwordmark::before,
+  .subwordmark::after {
+    content: "";
+    width: 44px;
+    height: 1px;
+    background: rgba(70, 169, 143, 0.52);
+  }
+
+  .tagline {
+    margin-top: 10px;
+    font-family: var(--font-display);
+    font-size: 23px;
+    line-height: 1.48;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+
+  .name-story {
+    margin-top: 18px;
+    padding: 13px 28px 14px;
+    text-align: center;
+    background: rgba(252, 250, 244, 0.74);
+    border: 1.5px solid rgba(166, 221, 205, 0.78);
+    border-radius: 18px;
+    box-shadow: 0 4px 0 rgba(166, 221, 205, 0.28);
+    backdrop-filter: blur(6px);
+  }
+
+  .story-kicker {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--green-700);
+  }
+
+  .story-text {
+    margin-top: 6px;
+    font-size: 16px;
+    line-height: 1.62;
+    color: var(--ink-soft);
+  }
+
+  .hero {
+    margin-top: 22px;
+    text-align: center;
+  }
+
+  .hook-headline {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 1.18;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+
+  .hook-headline .highlight {
+    position: relative;
+    display: inline-block;
+    color: var(--green-700);
+  }
+
+  .hook-headline .highlight::after {
+    content: "";
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    bottom: 7px;
+    height: 14px;
+    z-index: -1;
+    background: rgba(166, 221, 205, 0.55);
+    border-radius: 999px;
+  }
+
+  .hook-sub {
+    margin-top: 10px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.75;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+
+  .mascot-stage {
+    position: relative;
+    width: 540px;
+    height: 382px;
+    margin: 12px auto 0;
+  }
+
+  .mascot-glow {
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    width: 412px;
+    height: 336px;
+    transform: translateX(-50%);
+    background:
+      radial-gradient(ellipse at 52% 42%, rgba(252, 250, 244, 0.94) 0%, rgba(252, 250, 244, 0.74) 40%, rgba(252, 250, 244, 0) 72%),
+      radial-gradient(ellipse at 50% 86%, rgba(217, 180, 106, 0.22) 0%, rgba(217, 180, 106, 0) 66%);
+    border-radius: 50%;
+  }
+
+  .mascot {
+    position: absolute;
+    left: 50%;
+    top: -16px;
+    width: 420px;
+    transform: translateX(-50%);
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(ellipse 58% 57% at 50% 50%, #000 0 66%, rgba(0, 0, 0, 0.82) 76%, transparent 88%);
+    mask-image: radial-gradient(ellipse 58% 57% at 50% 50%, #000 0 66%, rgba(0, 0, 0, 0.82) 76%, transparent 88%);
+    filter: drop-shadow(0 22px 24px rgba(217, 180, 106, 0.16));
+  }
+
+  .floating-note {
+    position: absolute;
+    z-index: 3;
+    width: 142px;
+    padding: 12px 14px;
+    background: rgba(252, 250, 244, 0.88);
+    border: 1.5px solid rgba(217, 180, 106, 0.52);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(58, 58, 52, 0.10);
+    color: var(--ink-soft);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    line-height: 1.48;
+    text-align: left;
+  }
+
+  .floating-note strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--green-700);
+    font-size: 14px;
+  }
+
+  .floating-note.left {
+    left: 0;
+    top: 88px;
+    transform: rotate(-5deg);
+  }
+
+  .floating-note.right {
+    right: 0;
+    top: 164px;
+    transform: rotate(5deg);
+  }
+
+  .capabilities {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .cap-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 94px;
+    padding: 14px 20px;
+    background: rgba(252, 250, 244, 0.82);
+    border: 1.5px solid rgba(166, 221, 205, 0.78);
+    border-radius: 18px;
+    box-shadow: 0 4px 0 rgba(166, 221, 205, 0.24), 0 14px 34px rgba(74, 138, 125, 0.08);
+  }
+
+  .cap-icon {
+    flex: 0 0 54px;
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    background:
+      linear-gradient(145deg, rgba(228, 244, 238, 0.92), rgba(251, 231, 233, 0.70));
+    border: 1px solid rgba(70, 169, 143, 0.32);
+  }
+
+  .cap-icon svg {
+    width: 35px;
+    height: 35px;
+  }
+
+  .cap-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cap-title {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-family: var(--font-sans);
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .cap-en {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 9px;
+    border-radius: 999px;
+    background: rgba(70, 169, 143, 0.12);
+    color: var(--green-700);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .cap-desc {
+    margin-top: 5px;
+    font-size: 13.5px;
+    line-height: 1.54;
+    color: var(--ink-soft);
+  }
+
+  .block-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 12px;
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+  }
+
+  .block-title::before,
+  .block-title::after {
+    content: "";
+    width: 28px;
+    height: 1.5px;
+    background: rgba(70, 169, 143, 0.58);
+  }
+
+  .lifecycle {
+    margin-top: 24px;
+  }
+
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr 20px 1fr 20px 1fr 20px 1fr;
+    align-items: start;
+    gap: 6px;
+  }
+
+  .flow-step {
+    text-align: center;
+  }
+
+  .flow-art {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 8px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(252, 250, 244, 0.86);
+    border: 2px solid rgba(217, 180, 106, 0.62);
+    box-shadow: 0 5px 0 rgba(217, 180, 106, 0.22);
+  }
+
+  .flow-art .sprite {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+  }
+
+  .sprite.xun {
+    background-image: url("assets/xiaoman-xunwuling.png");
+    background-size: 300% 200%;
+    background-position: left top;
+  }
+
+  .sprite.camera {
+    background-image: url("assets/xiaoman-camera.png");
+    background-size: 165% auto;
+    background-position: center 16%;
+    mix-blend-mode: multiply;
+  }
+
+  .sprite.idle {
+    background-image: url("assets/xiaoman-idle.png");
+    background-size: 300% 200%;
+    background-position: center top;
+  }
+
+  .sprite.seal {
+    background-image: url("assets/xiaoman-seal-line.png");
+    background-size: 82% auto;
+    background-position: center;
+  }
+
+  .flow-label {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .flow-sub {
+    margin-top: 4px;
+    font-size: 10.8px;
+    line-height: 1.32;
+    color: var(--ink-faint);
+  }
+
+  .flow-arrow {
+    padding-top: 39px;
+    color: var(--green-700);
+    font-family: var(--font-sans);
+    font-size: 18px;
+    opacity: 0.62;
+  }
+
+  .scenarios {
+    margin-top: 22px;
+  }
+
+  .scenarios-intro {
+    text-align: center;
+  }
+
+  .scenarios-q {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 24px;
+    background: rgba(252, 250, 244, 0.86);
+    border: 1.5px solid rgba(70, 169, 143, 0.64);
+    border-radius: 999px;
+    box-shadow: 0 4px 0 rgba(166, 221, 205, 0.24);
+    font-family: var(--font-display);
+    font-size: 24px;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+
+  .scenarios-sub {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.08em;
+  }
+
+  .scenarios-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .scenario-card {
+    min-height: 61px;
+    padding: 9px 10px 8px;
+    background: rgba(252, 250, 244, 0.84);
+    border: 1.2px solid rgba(231, 154, 166, 0.34);
+    border-radius: 14px;
+    box-shadow: 0 4px 0 rgba(231, 154, 166, 0.13);
+  }
+
+  .scenario-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    color: var(--ink);
+    font-size: 12.5px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .scenario-dot {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--green-500);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    font-weight: 700;
+    box-shadow: 0 2px 0 rgba(70, 169, 143, 0.36);
+  }
+
+  .scenario-card:nth-child(2n) .scenario-dot {
+    background: var(--pink-500);
+    box-shadow: 0 2px 0 rgba(231, 154, 166, 0.34);
+  }
+
+  .scenario-card:nth-child(3n) .scenario-dot {
+    background: var(--gold);
+    box-shadow: 0 2px 0 rgba(217, 180, 106, 0.36);
+  }
+
+  .scenario-desc {
+    margin-top: 4px;
+    padding-left: 27px;
+    color: var(--ink-soft);
+    font-size: 10px;
+    line-height: 1.38;
+    white-space: nowrap;
+  }
+
+  .philosophy {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 15px 22px;
+    background:
+      linear-gradient(135deg, rgba(252, 250, 244, 0.92), rgba(228, 244, 238, 0.62));
+    border: 1.5px solid rgba(217, 180, 106, 0.46);
+    border-radius: 20px;
+    box-shadow: 0 4px 0 rgba(217, 180, 106, 0.18);
+  }
+
+  .philosophy-seal {
+    width: 108px;
+    height: 108px;
+    object-fit: contain;
+    opacity: 0.90;
+  }
+
+  .phil-kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.26em;
+    color: var(--red-seal);
+  }
+
+  .phil-text {
+    margin-top: 6px;
+    font-family: var(--font-display);
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  .phil-note {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+
+  .vision {
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .vision-text {
+    font-family: var(--font-display);
+    font-size: 17px;
+    line-height: 1.48;
+    color: var(--ink-soft);
+  }
+
+  .vision-slogan {
+    margin-top: 6px;
+    font-family: var(--font-display);
+    font-size: 29px;
+    line-height: 1.22;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+  }
+
+  .vision-slogan .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin: 0 13px 5px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .footer {
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  .footer-panel {
+    display: grid;
+    grid-template-columns: 1fr 124px;
+    gap: 16px;
+    align-items: center;
+    padding: 13px 16px 13px 20px;
+    background: rgba(252, 250, 244, 0.82);
+    border: 1.5px solid rgba(166, 221, 205, 0.72);
+    border-radius: 18px;
+    box-shadow: 0 4px 0 rgba(166, 221, 205, 0.22);
+    text-align: left;
+  }
+
+  .footer-links {
+    display: grid;
+    gap: 8px;
+  }
+
+  .link-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .link-label {
+    flex: 0 0 auto;
+    min-width: 70px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: var(--green-700);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-align: center;
+  }
+
+  .link-text {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.38;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .qr-slot {
+    width: 108px;
+    height: 108px;
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background:
+      linear-gradient(90deg, rgba(58, 58, 52, 0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(58, 58, 52, 0.08) 1px, transparent 1px),
+      rgba(255, 255, 255, 0.72);
+    background-size: 13px 13px;
+    border: 1.5px dashed rgba(70, 169, 143, 0.62);
+    color: var(--green-700);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-align: center;
+  }
+
+  .footer-badge {
+    margin-top: 10px;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+<main class="banner" aria-label="小满集易拉宝">
+  <div class="top-pattern" aria-hidden="true">
+    <div class="branch branch-left">
+      <svg viewBox="0 0 160 120">
+        <path d="M16 92 C48 58, 72 36, 126 16" fill="none" stroke="#46a98f" stroke-width="3" stroke-linecap="round" opacity="0.32"/>
+        <path d="M54 57 C42 44, 33 38, 23 36 C26 50, 35 59, 51 64" fill="#e4f4ee" stroke="#5cc1a8" stroke-width="2" opacity="0.72"/>
+        <path d="M86 36 C78 22, 67 15, 56 13 C58 30, 69 40, 84 43" fill="#fbe7e9" stroke="#e79aa6" stroke-width="2" opacity="0.72"/>
+        <path d="M116 22 C115 8, 108 0, 99 -5 C94 9, 99 22, 113 28" fill="#ecd9a8" stroke="#d9b46a" stroke-width="2" opacity="0.78"/>
+      </svg>
+    </div>
+    <div class="branch branch-right">
+      <svg viewBox="0 0 160 120">
+        <path d="M16 92 C48 58, 72 36, 126 16" fill="none" stroke="#46a98f" stroke-width="3" stroke-linecap="round" opacity="0.32"/>
+        <path d="M54 57 C42 44, 33 38, 23 36 C26 50, 35 59, 51 64" fill="#e4f4ee" stroke="#5cc1a8" stroke-width="2" opacity="0.72"/>
+        <path d="M86 36 C78 22, 67 15, 56 13 C58 30, 69 40, 84 43" fill="#fbe7e9" stroke="#e79aa6" stroke-width="2" opacity="0.72"/>
+        <path d="M116 22 C115 8, 108 0, 99 -5 C94 9, 99 22, 113 28" fill="#ecd9a8" stroke="#d9b46a" stroke-width="2" opacity="0.78"/>
+      </svg>
+    </div>
+  </div>
+
+  <img class="soft-stamp one" src="assets/xiaoman-stamp-app.png" alt="">
+  <img class="soft-stamp two" src="assets/xiaoman-stamp-app.png" alt="">
+
+  <section class="section brand-header">
+    <div class="brand-row">
+      <h1 class="wordmark">小满集</h1>
+      <img class="header-seal" src="assets/xiaoman-mingzhang.png" alt="小满印">
+    </div>
+    <div class="subwordmark">DAILY POETIC PHOTO QUEST</div>
+    <div class="tagline">物致于此，小得盈满</div>
+  </section>
+
+  <section class="section">
+    <div class="name-story">
+      <div class="story-kicker">一只替你和古诗牵线的小瑞兽</div>
+      <p class="story-text">每天领一道寻物令，去生活里找一样东西或一个瞬间。拍下来，小满替你从真实诗库里牵出一首古诗。</p>
+    </div>
+  </section>
+
+  <section class="section hero">
+    <h2 class="hook-headline">把认真看过的世界<br><span class="highlight">收成一张诗笺</span></h2>
+    <p class="hook-sub">领寻物令 · 拍下此刻 · 小满牵诗 · 落成明信片</p>
+    <div class="mascot-stage">
+      <div class="mascot-glow"></div>
+      <img class="mascot" src="assets/xiaoman-camera.png" alt="拿着相机的小满">
+      <div class="floating-note left"><strong>今天找什么？</strong>一杯热饮、一道窗光、一个被用心布置的角落。</div>
+      <div class="floating-note right"><strong>不是 AI 写诗</strong>诗句来自核验诗库，小满只负责把你和古人牵上。</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="capabilities">
+      <article class="cap-card">
+        <div class="cap-icon" aria-hidden="true">
+          <svg viewBox="0 0 44 44">
+            <path d="M11 10 H32 Q36 10 36 14 V31 Q36 35 32 35 H11 Q8 35 8 31 V14 Q8 10 11 10Z" fill="#fcfaf4" stroke="#46a98f" stroke-width="2"/>
+            <path d="M15 17 H29" stroke="#d9b46a" stroke-width="2" stroke-linecap="round"/>
+            <path d="M15 23 H31" stroke="#9a958a" stroke-width="1.8" stroke-linecap="round" opacity="0.75"/>
+            <path d="M15 29 H25" stroke="#9a958a" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+            <circle cx="33" cy="11" r="4" fill="#f4c4cb" opacity="0.76"/>
+          </svg>
+        </div>
+        <div class="cap-content">
+          <div class="cap-title">寻物令 <span class="cap-en">Quest</span></div>
+          <div class="cap-desc">把“观察世界”变成一个轻轻的日常任务：找一样东西，或找一个正在发生的瞬间。</div>
+        </div>
+      </article>
+
+      <article class="cap-card">
+        <div class="cap-icon" aria-hidden="true">
+          <svg viewBox="0 0 44 44">
+            <path d="M14 29 C12 22 15 13 23 10 C29 8 35 12 35 19 C35 28 27 34 20 35" fill="none" stroke="#46a98f" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M10 18 C15 18 16 14 18 10 C20 16 23 18 29 18 C23 20 20 24 18 31 C16 24 14 20 10 18Z" fill="#ecd9a8" stroke="#d9b46a" stroke-width="1.5"/>
+            <path d="M24 25 H34" stroke="#e79aa6" stroke-width="2" stroke-linecap="round"/>
+            <path d="M24 30 H31" stroke="#9cc2cd" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="cap-content">
+          <div class="cap-title">牵出古诗 <span class="cap-en">Match</span></div>
+          <div class="cap-desc">AI 先读懂照片，再从唐诗宋词里匹配真实诗句，给这一幕找到千年前的回声。</div>
+        </div>
+      </article>
+
+      <article class="cap-card">
+        <div class="cap-icon" aria-hidden="true">
+          <svg viewBox="0 0 44 44">
+            <rect x="11" y="8" width="22" height="29" rx="3" fill="#fcfaf4" stroke="#46a98f" stroke-width="2"/>
+            <rect x="15" y="13" width="14" height="8" rx="2" fill="#cfe1e6"/>
+            <path d="M16 26 H28" stroke="#d9b46a" stroke-width="2" stroke-linecap="round"/>
+            <path d="M16 31 H25" stroke="#9a958a" stroke-width="1.8" stroke-linecap="round" opacity="0.62"/>
+            <circle cx="31" cy="33" r="5" fill="#c0473a" opacity="0.84"/>
+          </svg>
+        </div>
+        <div class="cap-content">
+          <div class="cap-title">诗笺夹 <span class="cap-en">Archive</span></div>
+          <div class="cap-desc">照片、题诗、出处、跋语和小满印一起落成卡面，变成你认真看过世界的证据。</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section lifecycle">
+    <h2 class="block-title">小满的一天</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-art"><div class="sprite xun"></div></div>
+        <div class="flow-label">领令</div>
+        <div class="flow-sub">抽一道<br>今日题目</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-art"><div class="sprite camera"></div></div>
+        <div class="flow-label">去找</div>
+        <div class="flow-sub">在现场<br>拍下一幕</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-art"><div class="sprite idle"></div></div>
+        <div class="flow-label">牵诗</div>
+        <div class="flow-sub">读图匹配<br>真实古诗</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-art"><div class="sprite seal"></div></div>
+        <div class="flow-label">成笺</div>
+        <div class="flow-sub">盖上小满印<br>收进诗笺夹</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section scenarios">
+    <div class="scenarios-intro">
+      <div class="scenarios-q">现场就能玩的六道寻物令</div>
+      <div class="scenarios-sub">让每个人用不同眼光，重新看见同一个空间</div>
+    </div>
+    <div class="scenarios-grid">
+      <div class="scenario-card">
+        <div class="scenario-head"><span class="scenario-dot">1</span>一杯热饮</div>
+        <div class="scenario-desc">停一下，好好看它一眼</div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-head"><span class="scenario-dot">2</span>一束光</div>
+        <div class="scenario-desc">窗光、灯光、屏幕的光</div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-head"><span class="scenario-dot">3</span>用心之物</div>
+        <div class="scenario-desc">别人的作品或摊上的小物</div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-head"><span class="scenario-dot">4</span>一个角落</div>
+        <div class="scenario-desc">有人在这儿用了一点心</div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-head"><span class="scenario-dot">5</span>一句话</div>
+        <div class="scenario-desc">便利贴、白板、名牌上的字</div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-head"><span class="scenario-dot">6</span>眼里的光</div>
+        <div class="scenario-desc">一张正发着光的脸</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section philosophy">
+    <img class="philosophy-seal" src="assets/xiaoman-stamp-large.png" alt="小满朱印">
+    <div>
+      <div class="phil-kicker">PRODUCT CORE</div>
+      <div class="phil-text">AI 不替你发明意义。它只是陪你把已经看见的一点好，留住。</div>
+      <p class="phil-note">小满集保存的不是一张孤零零的照片，而是一张带着任务、诗句、出处与心情的诗意明信片。</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-panel">
+      <div class="footer-links">
+        <div class="link-row">
+          <span class="link-label">DEMO</span>
+          <span class="link-text">小满集 H5 · 浏览器打开即用</span>
+        </div>
+        <div class="link-row">
+          <span class="link-label">TAKEAWAY</span>
+          <span class="link-text">完成一次寻物，带走一张属于你的诗笺</span>
+        </div>
+      </div>
+      <div class="qr-slot">二维码位</div>
+    </div>
+  </footer>
+</main>
+</body>
+</html>

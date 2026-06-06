@@ -11,6 +11,15 @@ function fmtDate(ts) {
 }
 const novert = (s = '') => s.replace(/[，。、！？；：]/g, ' ')
 
+/** 截取诗文前 2–6 句用于书笺展示，避免整首诗太长撑爆版面 */
+function excerptVerse(full, maxSentences = 4) {
+  if (!full) return ''
+  // 按句号、句号+换行拆分
+  const sentences = full.split(/[。！？]+/).filter(s => s.trim())
+  if (sentences.length <= maxSentences) return full
+  return sentences.slice(0, maxSentences).join('。') + '。'
+}
+
 /**
  * 诗笺成品 —— 照片直接住在明信片 / 书笺 / 票券的卡面里。
  * 导出的图片含：照片 · 寻物令主题 · 诗句 · 出处 · 时令 · 日期 · 小满落款印。
@@ -62,7 +71,7 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
               <div className="sj-paint">{image ? <img src={image} alt="" crossOrigin="anonymous" /> : <div className="sj-empty" />}</div>
               <div className="sj-versewrap">
                 <div className="sj-title-col">{poem.title}</div>
-                <div className="sj-verse">{poem.full}</div>
+                <div className="sj-verse">{excerptVerse(poem.full, 4)}</div>
                 <div className="sj-sealcol"><Seal /></div>
               </div>
               <div className="sj-bottom">
