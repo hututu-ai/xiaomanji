@@ -5,7 +5,7 @@ import XiaomanSprite from '../components/XiaomanSprite.jsx'
 import { COPY } from '../data/themes.js'
 import './Cover.css'
 
-// 封面页：名字 + slogan + 会动的小满。轻触 → 像翻开一本诗集那样进入。
+// 封面页：名字 + slogan + 会动的小满。轻触 → 像翻开一本小相册那样进入。
 export default function Cover() {
   const navigate = useNavigate()
   const [opening, setOpening] = useState(false)

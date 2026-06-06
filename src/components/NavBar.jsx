@@ -4,7 +4,7 @@ import './NavBar.css'
 const TABS = [
   { to: '/home', ico: '✦', label: '今日' },
   { to: '/nang', ico: '☉', label: '锦囊' },
-  { to: '/shiji', ico: '❖', label: '诗集' },
+  { to: '/shiji', ico: '▧', label: '相册' },
   { to: '/calendar', ico: '回', label: '日历' },
 ]
 
