@@ -224,3 +224,37 @@
   text-align: center;
   margin: 0;
 }
+
+/* 拍照前小贴士 */
+.cap-tips {
+  margin-top: 12px;
+  padding: 18px 20px;
+  background: var(--paper-card);
+  border: 1px dashed rgba(169, 214, 203, 0.5);
+  border-radius: var(--radius);
+}
+.cap-tips-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+}
+.cap-tips-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cap-tips-list li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 13.5px;
+  line-height: 2;
+  color: var(--ink-soft);
+}
+.cap-tips-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--green-500);
+}

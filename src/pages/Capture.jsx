@@ -150,6 +150,14 @@ export default function Capture() {
               <p className="cap-bubble">我在这儿等着——把你找到的那一幕，拍给我看看吧。</p>
             </div>
             <PhotoCapture onPick={handlePick} />
+            <div className="cap-tips">
+              <p className="cap-tips-title">小满的小建议 ✨</p>
+              <ul className="cap-tips-list">
+                <li>不用拍得多好看，随手拍就行</li>
+                <li>一朵花、一杯茶、窗外的云…都可以</li>
+                <li>我会替你从千年的诗里，找到和你此刻同频的那一句</li>
+              </ul>
+            </div>
           </div>
         )}
 
