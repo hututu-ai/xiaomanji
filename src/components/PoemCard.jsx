@@ -33,16 +33,25 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
   const { image, poem, resonance, postscript, themeText, solarTerm, createdAt } = jian
   if (!poem) return null
 
+  function dataUrlToBlob(dataUrl) {
+    const parts = dataUrl.split(',')
+    const mime = parts[0].match(/:(.*?);/)?.[1] || 'image/png'
+    const bin = atob(parts[1])
+    const buf = new Uint8Array(bin.length)
+    for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i)
+    return new Blob([buf], { type: mime })
+  }
+
   async function share() {
     if (!cardRef.current) return
     setSaving(true)
     const node = cardRef.current
-    node.classList.add('pm-shot--export') // 仅截图这一刻才套上品牌外框 + 二维码
+    node.classList.add('pm-shot--export')
     try {
       const dataUrl = await toPng(node, { pixelRatio: 2.4, cacheBust: true, backgroundColor: null })
-      const name = (poem.mingju || themeText || '诗笺').replace(/[\\/:*?"<>|，。]/g, '').slice(0, 10)
+      const name = (themeText || poem.mingju || '诗笺').replace(/[\\/:*?"<>|，。？！、\s]/g, '').slice(0, 12)
       const fname = `小满集_${name}.png`
-      const blob = await (await fetch(dataUrl)).blob()
+      const blob = dataUrlToBlob(dataUrl)
       const file = new File([blob], fname, { type: 'image/png' })
       // 移动端优先走系统分享面板（微信 / 存相册 / …）
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -54,8 +63,8 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
         a.click()
       }
     } catch (e) {
-      if (e && e.name === 'AbortError') return // 用户取消分享，不报错
-      console.error(e)
+      if (e && e.name === 'AbortError') return
+      console.error('分享失败', e)
       alert('生成失败了，再试一次好吗～')
     } finally {
       node.classList.remove('pm-shot--export')
@@ -89,9 +98,10 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
               </div>
               <div className="sj-bottom">
                 <span>{poem.author} · {poem.dynasty}</span>
-                <span className="sj-term">{term || themeText}</span>
+                <span className="sj-term">{term}</span>
                 <span>{fmtDate(createdAt)}</span>
               </div>
+              <div className="sj-theme">寻物令：「{themeText}」</div>
             </div>
           </div>
         )}
@@ -115,6 +125,7 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
                   ))
                 })()}
               </div>
+              <div className="pc-theme">「{themeText}」</div>
               <div className="pc-source">—— {poem.author}《{poem.title}》· {poem.dynasty}</div>
               <div className="pc-foot">
                 <span className="pc-term">{term || themeText}</span>
