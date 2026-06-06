@@ -59,7 +59,10 @@ export function getCandidates(hints = {}, anchor = {}, opts = {}) {
     if (s > 0) scored.push([s + Math.random() * 0.7, p])
   }
   scored.sort((a, b) => b[0] - a[0])
-  let pool = scored.slice(0, limit).map((x) => x[1])
+  let all = scored.map((x) => x[1])
+  // 硬过滤：优先诗人 ≥6 时只出他们的诗（游园会绝不出现偏门名字）
+  const priorityPool = all.filter((p) => PRIORITY_POETS.has(p.author))
+  let pool = priorityPool.length >= 6 ? priorityPool.slice(0, limit) : all.slice(0, limit)
   // 兜底：什么都没匹配上时，给一批抽象友好的写意诗
   if (pool.length < 6) {
     const fallback = POEMS.filter((p) => p.abstract && !ex.has(p.id))
