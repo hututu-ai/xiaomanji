@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import XiaomanSprite from '../components/XiaomanSprite.jsx'
@@ -17,6 +17,8 @@ export default function Capture() {
   const navigate = useNavigate()
   const theme = getThemeById(themeId)
   const nangId = state?.nangId
+  const sampleUrl = state?.sampleUrl
+  const sampleLabel = state?.sampleLabel
 
   const [step, setStep] = useState('intro') // intro|thinking|result|postscript|sealing|done|error
   const [image, setImage] = useState(null)
@@ -27,15 +29,7 @@ export default function Capture() {
   const excludeRef = useRef([])
   const savedRef = useRef(null)
   const finalizedRef = useRef(false)
-
-  if (!theme) {
-    return (
-      <div className="page capture" style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <p style={{ color: 'var(--ink-soft)' }}>这道寻物令找不到了。</p>
-        <button className="btn-ghost" onClick={() => navigate('/home')}>回去领一道</button>
-      </div>
-    )
-  }
+  const sampleLoadedRef = useRef(false)
 
   async function runMatch(dataUrl) {
     setError('')
@@ -63,6 +57,37 @@ export default function Capture() {
       setError('这张图片读不出来，换一张试试？')
       setStep('error')
     }
+  }
+
+  useEffect(() => {
+    if (!theme || !sampleUrl || sampleLoadedRef.current) return
+    sampleLoadedRef.current = true
+    async function loadSample() {
+      try {
+        const resp = await fetch(sampleUrl)
+        if (!resp.ok) throw new Error('样板照片读取失败')
+        const blob = await resp.blob()
+        const file = new File([blob], `${sampleLabel || 'sample'}.jpg`, { type: blob.type || 'image/jpeg' })
+        const dataUrl = await compressImageToDataURL(file)
+        setImage(dataUrl)
+        setPreviewOpen(false)
+        runMatch(dataUrl)
+      } catch (e) {
+        console.error(e)
+        setError('这张样板照片暂时读不出来，换一张试试？')
+        setStep('error')
+      }
+    }
+    loadSample()
+  }, [sampleUrl]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!theme) {
+    return (
+      <div className="page capture" style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <p style={{ color: 'var(--ink-soft)' }}>这道寻物令找不到了。</p>
+        <button className="btn-ghost" onClick={() => navigate('/home')}>回去领一道</button>
+      </div>
+    )
   }
 
   function rematch() {

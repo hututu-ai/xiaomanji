@@ -15,6 +15,15 @@ const XIAOMAN_ACTIONS = [
   { action: 'shouxia', label: '收下' },
 ]
 
+const SAMPLE_PHOTOS = [
+  { src: '/samples/xiaoman-sample-01.jpg', label: '白花满枝' },
+  { src: '/samples/xiaoman-sample-02.jpg', label: '蓝色草地' },
+  { src: '/samples/xiaoman-sample-03.jpg', label: '四叶小草' },
+  { src: '/samples/xiaoman-sample-04.jpg', label: '春日桃花' },
+  { src: '/samples/xiaoman-sample-05.jpg', label: '花映旧墙' },
+  { src: '/samples/xiaoman-sample-06.jpg', label: '柳影远山' },
+]
+
 export default function Home() {
   const navigate = useNavigate()
   const seen = useRef([])
@@ -38,6 +47,9 @@ export default function Home() {
     setAccepted(rec)
     setNangCount((n) => n + 1)
   }
+  function useSample(sample) {
+    navigate(`/capture/${theme.id}`, { state: { sampleUrl: sample.src, sampleLabel: sample.label } })
+  }
 
   return (
     <motion.div className="page home2 no-scrollbar" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
@@ -54,6 +66,21 @@ export default function Home() {
           </div>
         ))}
       </div>
+
+      <section className="h2-samples" aria-label="样板照片">
+        <div className="h2-samples-head">
+          <span>样板照片</span>
+          <small>点一张，直接成笺</small>
+        </div>
+        <div className="h2-sample-strip no-scrollbar">
+          {SAMPLE_PHOTOS.map((sample) => (
+            <button className="h2-sample" key={sample.src} onClick={() => useSample(sample)}>
+              <img src={sample.src} alt={sample.label} loading="lazy" />
+              <span>{sample.label}</span>
+            </button>
+          ))}
+        </div>
+      </section>
 
       {!revealed ? (
         // —— 入场：小满递来寻物令，轻触打开 ——
