@@ -7,7 +7,8 @@ import { COPY } from '../data/themes.js'
 import './Shiji.css'
 
 // 有专属故人印（萌化）的头部诗人
-const SEALED = new Set(['李白', '杜甫', '苏轼', '李清照', '陆游'])
+// 有朱红人物印章的诗人（优先展示萌化头像，其余用文字印）
+const SEALED = new Set(['李白', '杜甫', '苏轼', '李清照', '陆游', '陶渊明'])
 
 // 节气 → 季节；用来按时令分卷
 const TERM_SEASON = {

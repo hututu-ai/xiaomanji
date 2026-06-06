@@ -6,6 +6,16 @@ import POEMS from './poems.json'
 
 export { POEMS }
 
+// ——— 15 位优先诗人（游园会 Demo 用）：优先从这些家喻户晓的名字里牵诗 ———
+// 唐代 6 位：李白·杜甫·白居易·杜牧·孟浩然·柳宗元
+// 宋代 8 位：苏轼·李清照·陆游·辛弃疾·欧阳修·王安石·晏殊·柳永
+// 五代 1 位：李煜（千古词帝）
+const PRIORITY_POETS = new Set([
+  '李白', '杜甫', '白居易', '杜牧', '孟浩然', '柳宗元',
+  '苏轼', '李清照', '陆游', '辛弃疾', '欧阳修', '王安石', '晏殊', '柳永',
+  '李煜',
+])
+
 const byId = new Map(POEMS.map((p) => [p.id, p]))
 export function getPoemById(id) {
   return byId.get(id)
@@ -44,8 +54,8 @@ export function getCandidates(hints = {}, anchor = {}, opts = {}) {
     if (anchor.seasons && anchor.seasons.includes(p.season)) s += 1
     // 抽象/意识流照片 → 偏向写意朦胧诗
     if (wantAbstract && p.abstract) s += 3
-    // 头部诗人大幅加权 —— 现场要让观众遇见李白/苏轼/王维这种"我知道！"的名字
-    if (p.headliner) s += 2.6
+    // 15 位优先诗人大幅加权 —— 游园会现场让观众遇见"我知道！"的名字
+    if (PRIORITY_POETS.has(p.author)) s += 5
     if (s > 0) scored.push([s + Math.random() * 0.7, p])
   }
   scored.sort((a, b) => b[0] - a[0])
