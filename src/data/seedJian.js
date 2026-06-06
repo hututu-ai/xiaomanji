@@ -52,13 +52,6 @@ const SEED_V2 = [
     postscript: '', createdAt: now - 15 * day,
   },
   {
-    image: '/samples/r2.jpg', themeText: '春日花开映古院', themeType: 'object',
-    accent: { accent: '#5fa99b' }, layout: 'shujian', solarTerm: '春分',
-    poem: { id: 'ci_017752', mingju: '庭院深深深几许，云窗雾阁常扃', full: '庭院深深深几许，云窗雾阁常扃。柳梢梅萼渐分明。春归秣陵树，人客远安城。感月吟风多少事，如今老去无成。谁怜憔悴更凋零。试灯无意思，踏雪没心情。', title: '临江仙', author: '李清照', dynasty: '宋', form: '词' },
-    resonance: '花枝从古院的檐角探出来，像在问"你猜，这扇门后面藏了多少春天？"李清照说"庭院深深深几许"——有些美，越往里走，越看不尽。',
-    postscript: '', createdAt: now - 14 * day,
-  },
-  {
     image: '/samples/r3.jpg', themeText: '掌心捧着幸运的绿意', themeType: 'object',
     accent: { accent: '#e2929e' }, layout: 'ticket', solarTerm: '惊蛰',
     poem: { id: 'tang_015581', mingju: '野火烧不尽，春风吹又生', full: '离离原上草，一岁一枯荣。野火烧不尽，春风吹又生。远芳侵古道，晴翠接荒城。又送王孙去，萋萋满别情。', title: '赋得古原草送别', author: '白居易', dynasty: '唐', form: '诗(近体)' },
@@ -92,13 +85,6 @@ const SEED_V2 = [
     poem: { id: 'ci_001467', mingju: '大江东去，浪淘尽，千古风流人物', full: '大江东去，浪淘尽、千古风流人物。故垒西边人道是，三国周郎赤壁。乱石穿空，惊涛拍岸，卷起千堆雪。江山如画，一时多少豪杰。遥想公瑾当年，小乔初嫁了，雄姿英发。羽扇纶巾谈笑间，强虏灰飞烟灭。故国神游，多情应笑，我早生华发。人间如梦，一尊还酹江月。', title: '念奴娇·赤壁怀古', author: '苏轼', dynasty: '宋', form: '词' },
     resonance: '雪山倒映在湖里，浪花是白的，山也是白的。苏轼说"乱石穿空，惊涛拍岸，卷起千堆雪"——原来雪未必从天上来，它也可以从山和水的缝隙里涌出来。',
     postscript: '', createdAt: now - 9 * day,
-  },
-  {
-    image: '/samples/r8.jpg', themeText: '春日花开，满园温柔', themeType: 'moment',
-    accent: { accent: '#e2929e' }, layout: 'shujian', solarTerm: '雨水',
-    poem: { id: 'ci_020900', mingju: '零落成泥碾作尘，只有香如故', full: '驿外断桥边，寂寞开无主。已是黄昏独自愁，更著风和雨。无意苦争春，一任群芳妒。零落成泥碾作尘，只有香如故。', title: '卜算子·咏梅', author: '陆游', dynasty: '宋', form: '词' },
-    resonance: '满树的粉白，不争也不抢，只是安安静静地开着。陆游写梅"无意苦争春，一任群芳妒"——你拍到的这一树，大概也是这种脾气：你们热闹你们的，我开我自己的。',
-    postscript: '', createdAt: now - 8 * day,
   },
   {
     image: '/samples/r9.jpg', themeText: '夜色中，两杯美酒静待知音', themeType: 'object',
@@ -136,13 +122,6 @@ const SEED_V2 = [
     postscript: '', createdAt: now - 3 * day,
   },
   {
-    image: '/samples/r14.jpg', themeText: '喜鹊掠过秋林，静谧而悠然', themeType: 'object',
-    accent: { accent: '#6f9aa8' }, layout: 'shujian', solarTerm: '寒露',
-    poem: { id: 'ci_020965', mingju: '江头绿暗红稀', full: '江头绿暗红稀。燕交飞。忽到当年行处、恨依依。洒清泪。叹人事。与心违。满酌玉壶花露、送春归。', title: '上西楼·相见欢', author: '陆游', dynasty: '宋', form: '词' },
-    resonance: '喜鹊从红叶间穿过去，像秋天打了个响指。陆游说"江头绿暗红稀"——绿渐渐暗了，红也慢慢淡了，但这只鸟不在乎，它只管飞它的。',
-    postscript: '', createdAt: now - 2 * day,
-  },
-  {
     image: '/samples/r15.jpg', themeText: '两人漫步乡间，岁月静好', themeType: 'moment',
     accent: { accent: '#6fb07e' }, layout: 'ticket', solarTerm: '秋分',
     poem: { id: 'tang_055951', mingju: '桃花潭水深千尺，不及汪伦送我情', full: '李白乘舟将欲行，忽闻岸上踏歌声。桃花潭水深千尺，不及汪伦送我情。', title: '赠汪伦', author: '李白', dynasty: '唐', form: '诗(近体)' },
@@ -164,4 +143,4 @@ const ALL_SEEDS = [...SEED_V1, ...SEED_V2]
 export const SEED_JIAN = ALL_SEEDS
 
 // 当前种子版本：递增此数字即可触发增量注入（新种子会加入，已有数据不会丢）
-export const SEED_VERSION = 4
+export const SEED_VERSION = 5

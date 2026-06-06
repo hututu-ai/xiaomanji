@@ -56,8 +56,7 @@ function dayKey(date = new Date()) {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
 }
 
-// 首次打开（诗笺夹为空且没注入过）→ 填入示例诗笺，让 App 不空着。
-// 版本升级时 → 种子条目按 image 路径更新（替换诗词/共鸣话），用户自创诗笺不动。
+// 首次打开 → 填入示例诗笺。版本升级时 → 种子条目完全重建（增/删/改都生效），用户自创诗笺不动。
 export function maybeSeedJian() {
   try {
     const storedVer = parseInt(localStorage.getItem(K_SEED_VER) || '0', 10)
@@ -65,44 +64,34 @@ export function maybeSeedJian() {
 
     const existing = read(K_JIAN)
     if (storedVer === 0 && existing.length > 0) {
-      // 已经有用户数据 → 标记当前版本，不注入种子
       localStorage.setItem(K_SEED_VER, String(SEED_VERSION))
       return
     }
 
-    // 构建种子 image → 条目 映射，用于更新已有种子 & 补入新种子
-    const seedByImage = new Map(SEED_JIAN.map((s) => [s.image, s]))
-    const seedImages = new Set(seedByImage.keys())
-
-    // 分类已有条目：种子的 vs 用户自创的
+    // 分离：种子条目（/samples/ 路径） vs 用户自创诗笺（dataURL 或其他路径）
     const userItems = []
-    const updatedSeeds = []
-    const seenSeedImages = new Set()
-
+    const oldSeedById = new Map() // image → old entry (保留用户改过的跋)
     for (const it of existing) {
-      if (seedImages.has(it.image)) {
-        // 是种子条目 → 用最新种子数据替换
-        const seed = seedByImage.get(it.image)
-        updatedSeeds.push({ id: it.id, createdAt: it.createdAt, postscript: it.postscript, ...seed })
-        seenSeedImages.add(it.image)
+      if (it.image && it.image.startsWith('/samples/')) {
+        if (!oldSeedById.has(it.image)) oldSeedById.set(it.image, it)
       } else {
-        // 用户自己拍的诗笺 → 保留不动
         userItems.push(it)
       }
     }
 
-    // 补入新种子（之前版本没有的 image）
-    const newSeeds = []
-    for (const [img, seed] of seedByImage) {
-      if (!seenSeedImages.has(img)) {
-        newSeeds.push({ id: uid(), ...seed })
+    // 完全从 SEED_JIAN 重建种子条目，保留用户写过的跋
+    const rebuiltSeeds = SEED_JIAN.map((seed) => {
+      const old = oldSeedById.get(seed.image)
+      return {
+        id: old?.id || uid(),
+        createdAt: old?.createdAt || seed.createdAt,
+        postscript: old?.postscript || seed.postscript || '',
+        ...seed,
       }
-    }
+    })
 
-    if (updatedSeeds.length > 0 || newSeeds.length > 0) {
-      const list = [...newSeeds, ...updatedSeeds, ...userItems]
-      write(K_JIAN, list)
-    }
+    const list = [...rebuiltSeeds, ...userItems]
+    write(K_JIAN, list)
     localStorage.setItem(K_SEED_VER, String(SEED_VERSION))
   } catch (e) {
     console.warn('示例诗笺注入失败', e)
