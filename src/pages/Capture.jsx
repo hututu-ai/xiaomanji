@@ -20,6 +20,7 @@ export default function Capture() {
 
   const [step, setStep] = useState('intro') // intro|thinking|result|postscript|sealing|done|error
   const [image, setImage] = useState(null)
+  const [previewOpen, setPreviewOpen] = useState(false)
   const [result, setResult] = useState(null) // {poem, resonance, understanding}
   const [postscript, setPostscript] = useState('')
   const [error, setError] = useState('')
@@ -55,6 +56,7 @@ export default function Capture() {
     try {
       const dataUrl = await compressImageToDataURL(file)
       setImage(dataUrl)
+      setPreviewOpen(false)
       runMatch(dataUrl)
     } catch (e) {
       console.error(e)
@@ -102,9 +104,19 @@ export default function Capture() {
 
       <div className="cap-stage">
         {image && step !== 'done' && step !== 'sealing' && (
-          <div className="cap-preview">
-            <img src={image} alt="" />
-          </div>
+          <button
+            type="button"
+            className={`cap-preview ${previewOpen ? 'is-open' : ''}`}
+            onClick={() => setPreviewOpen((v) => !v)}
+            aria-label={previewOpen ? '收起照片预览' : '展开照片预览'}
+          >
+            <span className="cap-fold-layer cap-fold-back" />
+            <span className="cap-fold-layer cap-fold-mid" />
+            <span className="cap-fold-photo">
+              <img src={image} alt="" />
+            </span>
+            <span className="cap-fold-mark">已折入明信片</span>
+          </button>
         )}
 
         {step === 'intro' && (

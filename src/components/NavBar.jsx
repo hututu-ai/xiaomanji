@@ -5,7 +5,7 @@ const TABS = [
   { to: '/home', ico: '✦', label: '今日' },
   { to: '/nang', ico: '☉', label: '锦囊' },
   { to: '/shiji', ico: '▧', label: '诗笺夹' },
-  { to: '/calendar', ico: '回', label: '日历' },
+  { to: '/calendar', label: '日历' },
 ]
 
 export default function NavBar() {
@@ -15,7 +15,7 @@ export default function NavBar() {
     <nav className="navbar">
       {TABS.map((t) => (
         <NavLink key={t.to} to={t.to} className="nav-item">
-          <span className="nav-ico">{t.ico}</span>
+          {t.ico && <span className="nav-ico">{t.ico}</span>}
           <span className="nav-label">{t.label}</span>
         </NavLink>
       ))}

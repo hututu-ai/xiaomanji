@@ -5,7 +5,10 @@
   bottom: calc(14px + env(safe-area-inset-bottom));
   z-index: 30;
   display: flex;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 5px;
+  width: calc(100% - 28px);
+  max-width: 408px;
   padding: 7px;
   background: rgba(252, 250, 244, 0.86);
   backdrop-filter: blur(12px);
@@ -18,7 +21,10 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 15px;
+  justify-content: center;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 9px 10px;
   border-radius: 999px;
   color: var(--ink-soft);
   font-size: 14.5px;
@@ -35,4 +41,17 @@
 }
 .nav-ico {
   font-size: 14px;
+}
+
+@media (max-width: 370px) {
+  .navbar {
+    width: calc(100% - 20px);
+    gap: 3px;
+    padding: 6px;
+  }
+  .nav-item {
+    gap: 4px;
+    padding: 8px 7px;
+    font-size: 13.5px;
+  }
 }

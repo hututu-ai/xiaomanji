@@ -38,7 +38,7 @@ body {
   min-height: 100%;
   margin: 0 auto;
   position: relative;
-  padding: 0 22px calc(96px + env(safe-area-inset-bottom));
+  padding: 0 clamp(16px, 5vw, 22px) calc(92px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
 }
