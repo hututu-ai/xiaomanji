@@ -4,11 +4,11 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import imageCompression from 'browser-image-compression'
 import { poetRelation } from '../data/poetRelation.js'
-import { SEED_JIAN } from '../data/seedJian.js'
+import { SEED_JIAN, SEED_VERSION } from '../data/seedJian.js'
 
 const K_JIAN = 'xmj_jian_v1' // 诗笺夹：已完成任务的卡面与版式配方
 const K_TODAY = 'xmj_today_sign_v1' // 今日签：当天未完成才保留，过日作废
-const K_SEEDED = 'xmj_seeded_v1' // 已注入过示例诗笺的标记
+const K_SEED_VER = 'xmj_seed_ver_v1' // 种子注入版本号（增量：版本升级时补入新种子）
 
 function read(key) {
   try {
@@ -57,17 +57,28 @@ function dayKey(date = new Date()) {
 }
 
 // 首次打开（诗笺夹为空且没注入过）→ 填入示例诗笺，让 App 不空着。
-// 用户一旦自己收过/删过，标记置位，不再重复注入。
+// 版本升级时 → 仅补入新种子，已有数据不丢、不重复。
+// 用户一旦自己收过/删过，版本也会记录，不会重复注入旧版本种子。
 export function maybeSeedJian() {
   try {
-    if (localStorage.getItem(K_SEEDED)) return
-    if (read(K_JIAN).length > 0) {
-      localStorage.setItem(K_SEEDED, '1')
+    const storedVer = parseInt(localStorage.getItem(K_SEED_VER) || '0', 10)
+    if (storedVer >= SEED_VERSION) return
+
+    const existing = read(K_JIAN)
+    if (storedVer === 0 && existing.length > 0) {
+      // 已经有用户数据 → 标记当前版本，不注入种子
+      localStorage.setItem(K_SEED_VER, String(SEED_VERSION))
       return
     }
-    const list = SEED_JIAN.map((s) => ({ id: uid(), ...s }))
-    write(K_JIAN, list)
-    localStorage.setItem(K_SEEDED, '1')
+
+    // 注入本版本新增的种子（按 image 去重，避免已有诗笺重复注入）
+    const existingImages = new Set(existing.map((j) => j.image))
+    const newSeeds = SEED_JIAN.filter((s) => !existingImages.has(s.image))
+    if (newSeeds.length > 0) {
+      const list = [...newSeeds.map((s) => ({ id: uid(), ...s })), ...existing]
+      write(K_JIAN, list)
+    }
+    localStorage.setItem(K_SEED_VER, String(SEED_VERSION))
   } catch (e) {
     console.warn('示例诗笺注入失败', e)
   }
