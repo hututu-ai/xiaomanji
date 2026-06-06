@@ -1,0 +1,154 @@
+.capture {
+  gap: 16px;
+}
+.cap-head2 {
+  text-align: center;
+  padding: 6px 0 2px;
+}
+.cap-h2-tag {
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  color: var(--gold);
+}
+.cap-h2-theme {
+  margin: 4px 0 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.cap-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 4px;
+}
+.cap-preview {
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  border: 3px solid #fff;
+}
+.cap-preview img {
+  width: 100%;
+  max-height: 38vh;
+  object-fit: cover;
+  display: block;
+}
+
+.cap-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cap-center {
+  align-items: center;
+  text-align: center;
+}
+.cap-xm-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cap-bubble {
+  flex: 1;
+  margin: 0;
+  background: var(--paper-card);
+  border: 1px solid rgba(169, 214, 203, 0.6);
+  border-radius: 16px 16px 16px 5px;
+  padding: 12px 15px;
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--ink);
+  box-shadow: var(--shadow-soft);
+}
+
+.cap-decide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+.cap-decide .btn-primary {
+  width: 100%;
+  max-width: 300px;
+}
+.cap-decide-sub {
+  display: flex;
+  gap: 22px;
+}
+.cap-mini {
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+.cap-mini:active {
+  color: var(--accent);
+}
+
+.cap-textarea {
+  width: 100%;
+  resize: none;
+  padding: 14px 16px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+  background: var(--paper-card);
+  border: 1px solid var(--green-300);
+  border-radius: var(--radius);
+  outline: none;
+}
+.cap-textarea:focus {
+  border-color: var(--green-500);
+}
+.cap-full {
+  width: 100%;
+}
+
+.cap-thinking {
+  gap: 12px;
+  padding-top: 8px;
+}
+.cap-think-say {
+  margin: 0;
+  font-size: 16.5px;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+
+.cap-sealing-tip,
+.cap-done-tip {
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin: 6px 0 0;
+  text-align: center;
+}
+.cap-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.cap-done-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+}
+.cap-done-btns .btn-primary,
+.cap-done-btns .btn-ghost {
+  width: 100%;
+  max-width: 300px;
+}
+.cap-error {
+  font-size: 15px;
+  color: var(--pink-500);
+  line-height: 1.7;
+  text-align: center;
+  margin: 0;
+}

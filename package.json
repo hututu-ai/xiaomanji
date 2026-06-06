@@ -1,0 +1,24 @@
+{
+  "name": "xiaomanji",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "小满集 — 物致于此，小得盈满。一座只属于你的观看博物馆。",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "browser-image-compression": "^2.0.2",
+    "framer-motion": "^11.3.0",
+    "html-to-image": "^1.11.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.0"
+  }
+}

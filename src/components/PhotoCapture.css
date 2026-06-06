@@ -1,0 +1,15 @@
+.pc-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+}
+.pc-btn {
+  width: 100%;
+  max-width: 280px;
+}
+.pc-ico {
+  font-size: 19px;
+  line-height: 1;
+}

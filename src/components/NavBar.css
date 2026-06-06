@@ -1,0 +1,38 @@
+.navbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 30;
+  display: flex;
+  gap: 8px;
+  padding: 7px;
+  background: rgba(252, 250, 244, 0.86);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(169, 214, 203, 0.5);
+  border-radius: 999px;
+  box-shadow: var(--shadow-soft);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 15px;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-label {
+  white-space: nowrap;
+}
+.nav-item.active {
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: #fff;
+}
+.nav-ico {
+  font-size: 14px;
+}

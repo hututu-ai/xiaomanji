@@ -1,0 +1,111 @@
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(20px + env(safe-area-inset-top));
+}
+
+.home2 {
+  justify-content: space-between;
+  min-height: 100%;
+  padding-bottom: 20px;
+}
+
+.h2-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 2px 0;
+}
+.h2-mark {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: var(--accent);
+}
+.h2-nang {
+  font-size: 14px;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+  padding: 6px 14px;
+  border: 1px solid var(--green-300);
+  border-radius: 999px;
+  background: rgba(252, 250, 244, 0.6);
+}
+
+/* 入场：递寻物令 */
+.h2-intro {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  width: 100%;
+}
+.h2-greet {
+  margin: 4px 0 0;
+  font-size: 18px;
+  line-height: 1.85;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+.h2-tap {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  animation: coverBreathe 2.6s ease-in-out infinite;
+}
+
+.h2-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 8px 0;
+}
+.h2-say {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--ink-soft);
+  text-align: center;
+  letter-spacing: 0.02em;
+  max-width: 320px;
+}
+
+.h2-btns {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+.h2-accept {
+  flex: 1.7;
+  padding-left: 0;
+  padding-right: 0;
+}
+.h2-redraw {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  padding: 13px 0;
+  border: 1.5px solid var(--green-300);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+}
+.h2-redraw:active {
+  transform: scale(0.97);
+  background: var(--green-100);
+}
