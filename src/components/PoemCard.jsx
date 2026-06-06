@@ -105,9 +105,15 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
             </div>
             <div className="pc-body">
               <div className="pc-verse-h">
-                {poem.mingju.split('，').map((seg, i, arr) => (
-                  <span className="pc-vh-ln" key={i}>{seg}{i < arr.length - 1 ? '，' : ''}</span>
-                ))}
+                {(() => {
+                  const hasStrong = /[。？！]/.test(poem.mingju)
+                  const lines = hasStrong
+                    ? poem.mingju.split(/[。？！]/).filter(Boolean)
+                    : poem.mingju.split('，').filter(Boolean)
+                  return lines.map((seg, i, arr) => (
+                    <span className="pc-vh-ln" key={i}>{seg}{!hasStrong && i < arr.length - 1 ? '，' : ''}</span>
+                  ))
+                })()}
               </div>
               <div className="pc-source">—— {poem.author}《{poem.title}》· {poem.dynasty}</div>
               <div className="pc-foot">

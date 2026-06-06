@@ -58,9 +58,15 @@ export default function Shiji() {
           {it.image ? <img src={it.image} alt="" /> : <div className="sj-card-empty" />}
           {it.poem?.mingju && (
             <span className="sj-card-verse">
-              {it.poem.mingju.split('，').map((seg, i, arr) => (
-                <span className="sj-verse-ln" key={i}>{seg}{i < arr.length - 1 ? '，' : ''}</span>
-              ))}
+              {(() => {
+                const hasStrong = /[。？！]/.test(it.poem.mingju)
+                const lines = hasStrong
+                  ? it.poem.mingju.split(/[。？！]/).filter(Boolean)
+                  : it.poem.mingju.split('，').filter(Boolean)
+                return lines.map((seg, i, arr) => (
+                  <span className="sj-verse-ln" key={i}>{seg}{!hasStrong && i < arr.length - 1 ? '，' : ''}</span>
+                ))
+              })()}
             </span>
           )}
         </div>
