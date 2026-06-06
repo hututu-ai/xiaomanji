@@ -7,6 +7,14 @@ import { drawTheme } from '../data/themes.js'
 import { addToJinnang, getJinnang } from '../services/storage.js'
 import './Home.css'
 
+const XIAOMAN_ACTIONS = [
+  { action: 'daiji', label: '待机' },
+  { action: 'xunwuling', label: '寻物令' },
+  { action: 'duanxiang', label: '端详' },
+  { action: 'gaizhang', label: '盖章' },
+  { action: 'shouxia', label: '收下' },
+]
+
 export default function Home() {
   const navigate = useNavigate()
   const seen = useRef([])
@@ -37,6 +45,15 @@ export default function Home() {
         <span className="h2-mark calligraphy">小满集</span>
         <button className="h2-nang" onClick={() => navigate('/nang')}>锦囊 {nangCount > 0 ? `· ${nangCount}` : ''}</button>
       </header>
+
+      <div className="h2-xm-strip no-scrollbar" aria-label="小满动作集">
+        {XIAOMAN_ACTIONS.map((it) => (
+          <div className="h2-xm-card" key={it.action}>
+            <XiaomanSprite action={it.action} size={46} fps={it.action === 'gaizhang' ? 8 : 6} />
+            <span>{it.label}</span>
+          </div>
+        ))}
+      </div>
 
       {!revealed ? (
         // —— 入场：小满递来寻物令，轻触打开 ——
