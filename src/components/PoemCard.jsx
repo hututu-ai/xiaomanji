@@ -33,39 +33,53 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
   const { image, poem, resonance, postscript, themeText, solarTerm, createdAt } = jian
   if (!poem) return null
 
-  function dataUrlToBlob(dataUrl) {
-    const parts = dataUrl.split(',')
-    const mime = parts[0].match(/:(.*?);/)?.[1] || 'image/png'
-    const bin = atob(parts[1])
-    const buf = new Uint8Array(bin.length)
-    for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i)
-    return new Blob([buf], { type: mime })
+  // 预加载 QR 码，避免分享时因图片未加载导致 toPng 失败
+  const qrPreloaded = useRef(false)
+  if (!qrPreloaded.current) {
+    qrPreloaded.current = true
+    const preload = new Image()
+    preload.src = '/share-qr.png'
   }
 
   async function share() {
     if (!cardRef.current) return
     setSaving(true)
     const node = cardRef.current
+    // 先让品牌框可见，等浏览器渲染一帧再截图
     node.classList.add('pm-shot--export')
+    await new Promise((r) => requestAnimationFrame(r))
+    await new Promise((r) => setTimeout(r, 120))
     try {
-      const dataUrl = await toPng(node, { pixelRatio: 2.4, cacheBust: true, backgroundColor: null })
+      // 降低像素比避免 mobile canvas 超限；加背景色提升兼容性
+      const dataUrl = await toPng(node, {
+        pixelRatio: 2,
+        cacheBust: false,
+        backgroundColor: '#fafafa',
+      })
       const name = (themeText || poem.mingju || '诗笺').replace(/[\\/:*?"<>|，。？！、\s]/g, '').slice(0, 12)
       const fname = `小满集_${name}.png`
-      const blob = dataUrlToBlob(dataUrl)
-      const file = new File([blob], fname, { type: 'image/png' })
-      // 移动端优先走系统分享面板（微信 / 存相册 / …）
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: '小满集 · 一拍一首诗', text: `${poem.mingju}　——${poem.author}` })
-      } else {
-        const a = document.createElement('a')
-        a.download = fname
-        a.href = dataUrl
-        a.click()
-      }
+      // 直接下载（避免 navigator.share 的 files 兼容性问题）
+      const a = document.createElement('a')
+      a.download = fname
+      a.href = dataUrl
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
     } catch (e) {
-      if (e && e.name === 'AbortError') return
       console.error('分享失败', e)
-      alert('生成失败了，再试一次好吗～')
+      // 降级：用 Canvas 手动绘制
+      try {
+        const dataUrl2 = await toPng(node, { pixelRatio: 1.5, cacheBust: false, backgroundColor: '#fafafa' })
+        const a = document.createElement('a')
+        a.download = `小满集_${Date.now()}.png`
+        a.href = dataUrl2
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+      } catch (e2) {
+        console.error('降级也失败', e2)
+        alert('生成失败了。请截屏保存这张诗笺吧～')
+      }
     } finally {
       node.classList.remove('pm-shot--export')
       setSaving(false)

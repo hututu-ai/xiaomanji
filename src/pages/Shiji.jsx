@@ -7,8 +7,12 @@ import { COPY } from '../data/themes.js'
 import './Shiji.css'
 
 // 有专属故人印（萌化）的头部诗人
-// 有朱红人物印章的诗人（优先展示萌化头像，其余用文字印）
-const SEALED = new Set(['李白', '杜甫', '苏轼', '李清照', '陆游', '陶渊明'])
+// 15 位优先诗人（全有朱红人物印章）
+const SEALED = new Set([
+  '李白', '杜甫', '白居易', '杜牧', '孟浩然', '柳宗元',
+  '苏轼', '李清照', '陆游', '辛弃疾', '欧阳修', '王安石', '晏殊', '柳永',
+  '李煜',
+])
 
 // 节气 → 季节；用来按时令分卷
 const TERM_SEASON = {
@@ -117,21 +121,25 @@ export default function Shiji() {
             已收 <b>{items.length}</b> 张 · 记录 <b>{days}</b> 天 · 遇见 <b>{poets.length}</b> 位古人
           </div>
 
-          {poets.length > 0 && (
-            <section className="sj-zhiyin">
-              <h2 className="sj-sec-title">你遇见的古人</h2>
-              <div className="sj-poets no-scrollbar">
-                {poets.map((p) => (
-                  <div className="sj-poet" key={p.author}>
-                    {SEALED.has(p.author) ? (
-                      <img className="sj-poet-img" src={`/seal/poet-${p.author}.png`} alt={p.author} />
-                    ) : (
-                      <div className={`sj-poet-seal ${p.author.length > 2 ? 'sj-seal-sm' : ''}`}>{p.author}</div>
-                    )}
-                    <div className="sj-poet-name">{p.author}</div>
-                    <div className="sj-poet-tier">{p.tier} · {p.count}</div>
+          {/* —— 知音录：15位诗人全部展示，遇见的点亮，未遇的置灰 —— */}
+          <section className="sj-zhiyin">
+            <h2 className="sj-sec-title">你遇见的古人 · {poets.length}/15</h2>
+            <div className="sj-poets no-scrollbar">
+              {[...SEALED].sort().map((author) => {
+                const met = poets.find((p) => p.author === author)
+                return (
+                  <div className={`sj-poet ${met ? '' : 'sj-poet--locked'}`} key={author}>
+                    <img
+                      className="sj-poet-img"
+                      src={`/seal/poet-${author}.png`}
+                      alt={author}
+                      onError={(e) => { e.target.style.display = 'none' }}
+                    />
+                    <div className="sj-poet-name">{author}</div>
+                    <div className="sj-poet-tier">{met ? `${met.tier} · ${met.count}` : '未遇'}</div>
                   </div>
-                ))}
+                )
+              })}
               </div>
             </section>
           )}

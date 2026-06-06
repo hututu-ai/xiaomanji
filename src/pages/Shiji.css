@@ -82,6 +82,18 @@
   object-fit: contain;
   margin: 0 auto 4px;
   display: block;
+  transition: filter 0.4s, opacity 0.4s;
+}
+/* 未遇的诗人：印章置灰 */
+.sj-poet--locked .sj-poet-img {
+  filter: grayscale(1) opacity(0.35);
+}
+.sj-poet--locked .sj-poet-name {
+  color: var(--ink-faint);
+}
+.sj-poet--locked .sj-poet-tier {
+  color: var(--ink-faint);
+  opacity: 0.6;
 }
 .sj-poet-seal {
   width: 52px;

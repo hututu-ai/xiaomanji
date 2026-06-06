@@ -5,7 +5,11 @@ import './Calendar.css'
 
 const WEEK = ['一', '二', '三', '四', '五', '六', '日']
 // 有朱红人物印章的诗人（优先展示萌化头像，其余用文字印）
-const SEALED = new Set(['李白', '杜甫', '苏轼', '李清照', '陆游', '陶渊明'])
+const SEALED = new Set([
+  '李白', '杜甫', '白居易', '杜牧', '孟浩然', '柳宗元',
+  '苏轼', '李清照', '陆游', '辛弃疾', '欧阳修', '王安石', '晏殊', '柳永',
+  '李煜',
+])
 const EN = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
 export default function Calendar() {
