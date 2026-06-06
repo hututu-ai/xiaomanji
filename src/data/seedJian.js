@@ -164,4 +164,4 @@ const ALL_SEEDS = [...SEED_V1, ...SEED_V2]
 export const SEED_JIAN = ALL_SEEDS
 
 // 当前种子版本：递增此数字即可触发增量注入（新种子会加入，已有数据不会丢）
-export const SEED_VERSION = 3
+export const SEED_VERSION = 4
