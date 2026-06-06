@@ -57,8 +57,7 @@ function dayKey(date = new Date()) {
 }
 
 // 首次打开（诗笺夹为空且没注入过）→ 填入示例诗笺，让 App 不空着。
-// 版本升级时 → 仅补入新种子，已有数据不丢、不重复。
-// 用户一旦自己收过/删过，版本也会记录，不会重复注入旧版本种子。
+// 版本升级时 → 种子条目按 image 路径更新（替换诗词/共鸣话），用户自创诗笺不动。
 export function maybeSeedJian() {
   try {
     const storedVer = parseInt(localStorage.getItem(K_SEED_VER) || '0', 10)
@@ -71,11 +70,37 @@ export function maybeSeedJian() {
       return
     }
 
-    // 注入本版本新增的种子（按 image 去重，避免已有诗笺重复注入）
-    const existingImages = new Set(existing.map((j) => j.image))
-    const newSeeds = SEED_JIAN.filter((s) => !existingImages.has(s.image))
-    if (newSeeds.length > 0) {
-      const list = [...newSeeds.map((s) => ({ id: uid(), ...s })), ...existing]
+    // 构建种子 image → 条目 映射，用于更新已有种子 & 补入新种子
+    const seedByImage = new Map(SEED_JIAN.map((s) => [s.image, s]))
+    const seedImages = new Set(seedByImage.keys())
+
+    // 分类已有条目：种子的 vs 用户自创的
+    const userItems = []
+    const updatedSeeds = []
+    const seenSeedImages = new Set()
+
+    for (const it of existing) {
+      if (seedImages.has(it.image)) {
+        // 是种子条目 → 用最新种子数据替换
+        const seed = seedByImage.get(it.image)
+        updatedSeeds.push({ id: it.id, createdAt: it.createdAt, postscript: it.postscript, ...seed })
+        seenSeedImages.add(it.image)
+      } else {
+        // 用户自己拍的诗笺 → 保留不动
+        userItems.push(it)
+      }
+    }
+
+    // 补入新种子（之前版本没有的 image）
+    const newSeeds = []
+    for (const [img, seed] of seedByImage) {
+      if (!seenSeedImages.has(img)) {
+        newSeeds.push({ id: uid(), ...seed })
+      }
+    }
+
+    if (updatedSeeds.length > 0 || newSeeds.length > 0) {
+      const list = [...newSeeds, ...updatedSeeds, ...userItems]
       write(K_JIAN, list)
     }
     localStorage.setItem(K_SEED_VER, String(SEED_VERSION))
