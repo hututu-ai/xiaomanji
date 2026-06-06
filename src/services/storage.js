@@ -3,10 +3,12 @@
 //  未来换后端只需替换这些函数实现，接口不变。
 // ─────────────────────────────────────────────────────────────────────────────
 import imageCompression from 'browser-image-compression'
-import { poetRelation } from '../data/poems.js'
+import { poetRelation } from '../data/poetRelation.js'
+import { SEED_JIAN } from '../data/seedJian.js'
 
 const K_JIAN = 'xmj_jian_v1' // 诗笺夹：已完成任务的卡面与版式配方
 const K_TODAY = 'xmj_today_sign_v1' // 今日签：当天未完成才保留，过日作废
+const K_SEEDED = 'xmj_seeded_v1' // 已注入过示例诗笺的标记
 
 function read(key) {
   try {
@@ -52,6 +54,23 @@ function dayKey(date = new Date()) {
   const d = date
   const p = (n) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
+}
+
+// 首次打开（诗笺夹为空且没注入过）→ 填入示例诗笺，让 App 不空着。
+// 用户一旦自己收过/删过，标记置位，不再重复注入。
+export function maybeSeedJian() {
+  try {
+    if (localStorage.getItem(K_SEEDED)) return
+    if (read(K_JIAN).length > 0) {
+      localStorage.setItem(K_SEEDED, '1')
+      return
+    }
+    const list = SEED_JIAN.map((s) => ({ id: uid(), ...s }))
+    write(K_JIAN, list)
+    localStorage.setItem(K_SEEDED, '1')
+  } catch (e) {
+    console.warn('示例诗笺注入失败', e)
+  }
 }
 
 // ——— 诗笺夹（照片嵌在明信片/票券/书笺里）———

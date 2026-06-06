@@ -3,41 +3,66 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import XiaomanSprite from '../components/XiaomanSprite.jsx'
 import XunwuScroll from '../components/XunwuScroll.jsx'
-import { drawTheme, getThemeById } from '../data/themes.js'
+import LoadingDots from '../components/LoadingDots.jsx'
+import { drawTheme, getThemeById, newThemeFromAI, registerTheme } from '../data/themes.js'
+import { generateXunwu } from '../services/ai.js'
 import { countJianOnDate, getTodaySign, setTodaySign } from '../services/storage.js'
 import './Home.css'
 
-// DEV-ONLY: 样板照片和动作集已移至开发页面，正式首页不显示
-
 export default function Home() {
   const navigate = useNavigate()
-  const seen = useRef([])
+  const seen = useRef([]) // 最近出过的寻物令文案，喂给 AI 避免重复
   const boot = useRef(null)
   if (!boot.current) {
     const pending = getTodaySign()
     const pendingTheme = pending ? getThemeById(pending.themeId) : null
-    const t = pendingTheme || drawTheme([])
-    seen.current = [t.id]
-    boot.current = { pending: pendingTheme ? pending : null, revealed: !!pendingTheme, theme: t }
+    boot.current = {
+      pending: pendingTheme ? pending : null,
+      theme: pendingTheme || null,
+      revealed: !!pendingTheme,
+    }
   }
   const [revealed, setRevealed] = useState(boot.current.revealed)
   const [theme, setTheme] = useState(boot.current.theme)
   const [pending, setPending] = useState(boot.current.pending)
   const [showPending, setShowPending] = useState(!!boot.current.pending)
+  const [generating, setGenerating] = useState(false)
   const [completedToday] = useState(() => countJianOnDate(new Date()) > 0)
 
-  function redraw() {
-    const t = drawTheme(seen.current)
-    seen.current = [...seen.current.slice(-6), t.id]
-    setTheme(t)
-    if (pending) setPending(setTodaySign(t))
+  // 实时生成一道新寻物令（断网/出错回退到内置）
+  async function genTheme() {
+    setGenerating(true)
+    try {
+      const ai = await generateXunwu(seen.current)
+      const t = newThemeFromAI(ai)
+      seen.current = [...seen.current.slice(-8), t.text]
+      setTheme(t)
+      if (pending) setPending(setTodaySign(t))
+      return t
+    } catch (e) {
+      console.error('寻物令实时生成失败，回退内置：', e)
+      const t = drawTheme([])
+      registerTheme(t)
+      seen.current = [...seen.current.slice(-8), t.text]
+      setTheme(t)
+      if (pending) setPending(setTodaySign(t))
+      return t
+    } finally {
+      setGenerating(false)
+    }
+  }
+
+  function reveal() {
+    setRevealed(true)
+    if (!theme && !pending) genTheme()
   }
   function startTodaySign(extraState = {}) {
-    const rec = pending || setTodaySign(theme)
+    if (!theme) return
+    registerTheme(theme)
+    const rec = pending && pending.themeId === theme.id ? pending : setTodaySign(theme)
     setPending(rec)
     navigate(`/capture/${theme.id}`, { state: { todaySignId: rec.id, ...extraState } })
   }
-
 
   return (
     <motion.div className="page home2 no-scrollbar" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
@@ -48,11 +73,8 @@ export default function Home() {
         </span>
       </header>
 
-
-
       {!revealed ? (
-        // —— 入场：小满递来寻物令，轻触打开 ——
-        <motion.button className="h2-intro" onClick={() => setRevealed(true)} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        <motion.button className="h2-intro" onClick={reveal} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <XiaomanSprite action="xunwuling" size={210} />
           <p className="h2-greet">你来啦。<br />我给你带了今天的寻物令——</p>
           <span className="h2-tap">轻轻点开，看看今天找点什么好 ✦</span>
@@ -71,17 +93,30 @@ export default function Home() {
           )}
 
           <div className="h2-stage">
-            <XiaomanSprite action="xunwuling" size={120} />
-            <p className="h2-say">{pending ? '这张是今天未完成的签。今天交上，日历才会盖章。' : '看，是这个——'}</p>
-            <AnimatePresence mode="wait">
-              <XunwuScroll key={theme.id} theme={theme} />
-            </AnimatePresence>
+            {generating ? (
+              // —— 小满正在"想"今天找什么 ——
+              <div className="h2-thinking">
+                <XiaomanSprite action="daiji" size={150} />
+                <p className="h2-say">小满正在想，今天请你找点什么好……</p>
+                <LoadingDots label="灵机一动中" />
+              </div>
+            ) : theme ? (
+              <>
+                <XiaomanSprite action="xunwuling" size={120} />
+                <p className="h2-say">{pending ? '这张是今天未完成的签。今天交上，日历才会盖章。' : '看，是这个——'}</p>
+                <AnimatePresence mode="wait">
+                  <XunwuScroll key={theme.id} theme={theme} />
+                </AnimatePresence>
+              </>
+            ) : null}
           </div>
 
-          <div className="h2-btns">
-            <button className="btn-primary h2-accept" onClick={() => startTodaySign()}>{pending ? '继续完成' : '现在就去找'}</button>
-            <button className="h2-redraw" onClick={redraw}>↻ 换一签</button>
-          </div>
+          {!generating && theme && (
+            <div className="h2-btns">
+              <button className="btn-primary h2-accept" onClick={() => startTodaySign()}>{pending ? '继续完成' : '现在就去找'}</button>
+              <button className="h2-redraw" onClick={genTheme}>↻ 换一签</button>
+            </div>
+          )}
         </>
       )}
     </motion.div>

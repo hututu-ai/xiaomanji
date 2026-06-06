@@ -4,9 +4,52 @@
   flex-direction: column;
   align-items: center;
 }
-.pm-card {
+/* 平时只是卡片本身；分享导出那一刻才临时套上品牌外框 + 二维码 */
+.pm-shot {
   width: 100%;
   max-width: 360px;
+}
+.pm-card {
+  width: 100%;
+}
+.pm-shot--export {
+  background: linear-gradient(162deg, #e9f4ef 0%, #fafafa 50%, #fce9ec 100%);
+  padding: 15px 15px 12px;
+  border-radius: 20px;
+}
+.pm-shot-brand {
+  display: none; /* 平时隐藏，分享时才出现 */
+  align-items: center;
+  gap: 11px;
+  margin-top: 13px;
+  padding: 0 3px;
+}
+.pm-shot--export .pm-shot-brand {
+  display: flex;
+}
+.pm-shot-qr {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 7px;
+  background: #fff;
+  padding: 3px;
+  box-shadow: 0 1px 4px rgba(58, 58, 52, 0.12);
+}
+.pm-shot-words {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pm-shot-words b {
+  font-size: 13.5px;
+  color: var(--green-700);
+  letter-spacing: 0.06em;
+}
+.pm-shot-words span {
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.03em;
 }
 .pm-seal {
   width: 40px;
@@ -105,17 +148,18 @@
 
 /* ═══════════ 明信片 ═══════════ */
 .pm-postcard .pc-frame {
-  background: var(--paper-card);
-  border: 1px solid var(--gold-soft);
-  border-radius: var(--radius-lg);
+  background: #fffdf8;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--shadow-card);
+  padding: 9px 9px 0;
 }
 .pc-paint {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
+  border-radius: 9px;
   background: var(--green-100);
 }
 .pc-photo {
@@ -127,40 +171,44 @@
 .pc-empty {
   background: linear-gradient(135deg, var(--green-100), var(--pink-100));
 }
-.pc-inscribe {
+/* 右上角小满"邮戳" */
+.pc-stamp {
   position: absolute;
-  top: 14px;
-  right: 12px;
-  bottom: 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  top: 8px;
+  right: 8px;
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  transform: rotate(6deg);
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.18));
 }
-.pc-verse {
-  writing-mode: vertical-rl;
+.pc-body {
+  padding: 16px 14px 14px;
+  text-align: center;
+}
+/* 横排题诗，逗号断行 */
+.pc-verse-h {
   font-family: var(--font-mincho);
   font-size: 19px;
   font-weight: 600;
-  letter-spacing: 0.16em;
-  line-height: 1.5;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
   color: #2f2f2a;
-  padding: 14px 7px;
-  background: linear-gradient(90deg, rgba(252, 250, 244, 0.88), rgba(252, 250, 244, 0.74));
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(58, 58, 52, 0.12);
+}
+.pc-vh-ln {
+  display: block;
 }
 .pc-source {
-  text-align: right;
   font-size: 12.5px;
   color: var(--gold);
-  padding: 12px 16px 0;
+  letter-spacing: 0.04em;
+  margin-top: 10px;
 }
 .pc-foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 12px 16px 14px;
+  margin-top: 14px;
   padding-top: 11px;
   border-top: 1px solid rgba(217, 180, 106, 0.3);
 }

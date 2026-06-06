@@ -43,7 +43,9 @@ export const THEMES = [
     anchor: { moods: ['闲适', '宁静', '释然'], aura: ['空灵', '禅意'] } },
 ]
 
-/** 随机抽一张寻物令（换签用，优先避开刚刚看过的签） */
+export const ACCENTS = [A.gold, A.green, A.pink, A.blue, A.fresh]
+
+/** 兜底：断网 / AI 出错时，从写死的 12 条里随机抽（优先避开刚看过的） */
 export function drawTheme(exclude = []) {
   const ex = new Set(exclude)
   const pool = THEMES.filter((t) => !ex.has(t.id))
@@ -51,15 +53,54 @@ export function drawTheme(exclude = []) {
   return list[Math.floor(Math.random() * list.length)]
 }
 
+// ——— 动态主题注册表 ———
+// AI 实时生成的寻物令不在 THEMES 数组里，注册到这里（持久化），
+// 这样 getThemeById 在跳转/刷新后仍能按 id 找回完整主题（含 anchor 诗锚）。
+const DYN_KEY = 'xmj_dyn_themes_v1'
+function loadDyn() {
+  try { return JSON.parse(localStorage.getItem(DYN_KEY) || '{}') } catch { return {} }
+}
+export function registerTheme(t) {
+  try {
+    const m = loadDyn()
+    m[t.id] = t
+    const ids = Object.keys(m)
+    if (ids.length > 40) delete m[ids[0]] // 限量，避免无限增长
+    localStorage.setItem(DYN_KEY, JSON.stringify(m))
+  } catch (e) { console.warn('registerTheme failed', e) }
+  return t
+}
+
 export function getThemeById(id) {
+  const m = loadDyn()
+  if (m[id]) return m[id]
   return THEMES.find((t) => t.id === id)
+}
+
+const uid = () =>
+  typeof crypto !== 'undefined' && crypto.randomUUID
+    ? crypto.randomUUID()
+    : 'dyn_' + Date.now() + Math.random().toString(16).slice(2)
+
+/** 把 AI 返回的原始结果，补上 id + 配色，注册并返回一个完整主题 */
+export function newThemeFromAI(ai, accentIndex = Math.floor(Math.random() * ACCENTS.length)) {
+  const theme = {
+    id: uid(),
+    text: ai.text,
+    hint: ai.hint,
+    type: ai.type === 'moment' ? 'moment' : 'object',
+    accent: ACCENTS[accentIndex % ACCENTS.length],
+    anchor: ai.anchor || {},
+    fromAI: true,
+  }
+  return registerTheme(theme)
 }
 
 // 首次进入的三拍引导（小满的声音，带核心主旨）
 export const ONBOARDING = [
-  { say: '你来啦。我是小满。', sub: '一只爱东张西望的小瑞兽。', action: 'xunwuling' },
-  { say: '在这个什么都显得"没意义"的世界里，\n其实每天都有一点点好看的东西——\n悄悄发生，又悄悄过去。', sub: '只是我们常常，来不及看它一眼。', action: 'daiji' },
-  { say: '我想请你，每天找一样、拍给我。\n我替你从千年的诗里牵一句，\n把这点微小的好，留下来。', sub: '不必圆满，小小的满足，也值得被看见。', action: 'xunwuling' },
+  { say: '你来啦，我是小满。', sub: '一只爱东张西望的小瑞兽。', action: 'xunwuling' },
+  { say: '这世界，好像什么都“没意义”。\n可每天，总有一点点好看的，\n悄悄发生，又悄悄过去。', sub: '只是我们常常，来不及看它一眼。', action: 'daiji' },
+  { say: '每天，我请你找一样、拍给我看。\n我替你从千年的诗里牵一句，\n把这点微小的好，留下来。', sub: '不必圆满，小小的满足，也值得被看见。', action: 'xunwuling' },
 ]
 
 // 小满的声音（固定文案）

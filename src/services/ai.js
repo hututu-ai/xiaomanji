@@ -9,8 +9,7 @@
 //
 //  换别家模型：改 VISION_MODEL / TEXT_MODEL + api/_dashscope.js 的 ENDPOINT 即可。
 // ─────────────────────────────────────────────────────────────────────────────
-import { getCandidates, getPoemById } from '../data/poems.js'
-
+// 诗库（poems.json ~788KB）改成在 matchPoem 里按需动态加载，不进首屏包 → 打开更快。
 const AI_ENDPOINT = import.meta.env.VITE_AI_ENDPOINT || '/api/ai'
 // aiping.cn 上的最新千问：视觉用 Qwen3-VL（Instruct 非思考、快），文字用 Qwen3.7
 // 想要更高质量可把 TEXT_MODEL 换成 'Qwen3.7-Max'（更慢，思考更多）
@@ -123,6 +122,62 @@ ${list}
 }
 
 /**
+ * 实时生成一道"寻物令"（每次都不一样）。
+ * 室内会场可拍 + 有意义（发现微小的美 / 对抗虚无）+ 小满口吻。
+ * 同时让模型按诗库词表给出 anchor（情绪/意象/气质），匹配时用得上。
+ * @param {string[]} recentTexts 最近出过的，避免重复
+ * @returns {Promise<{text,hint,type,anchor:{moods,images,aura}}>}
+ */
+// 每次换一个"宽泛的感觉/方向"——是一类东西，不是一件特定物
+const XUNWU_ANGLES = [
+  '一点微小的善意', '谁的专注', '有人用过心的痕迹', '相伴、并肩的一刻',
+  '坚持的样子', '此刻一点点满足', '一束光', '一抹颜色',
+  '一双正在做事的手', '一张放松、或认真的脸', '一件被珍惜的东西',
+  '一句被写下来的话', '热闹里的一点安静', '一点暖意', '谁的好奇',
+  '让你忍不住多看一眼的东西', '一个温柔的小细节', '此刻最打动你的一幕',
+]
+
+export async function generateXunwu(recentTexts = []) {
+  const angle = XUNWU_ANGLES[Math.floor(Math.random() * XUNWU_ANGLES.length)]
+  const system = `你是"小满"，一只温柔的东方瑞兽。此刻你在一个室内的黑客松 / 创客游园会现场，邀请用户用"发现美的眼光"去看此刻的生活。你的内核：在这个显得虚无的世界里，帮人看见微小的、刚刚好的美好。`
+  const user = `出一道"寻物令"，请用户在现场拍一样东西、或一个瞬间。
+今天侧重这个方向（换个新鲜说法，别照抄）：「${angle}」。
+
+【最重要】要宽泛、要留出很多种拍法，**任何人在现场都能找到一个**：
+- 反面教材（千万别这样）：「递来的一根数据线」「两杯碰在一起的咖啡」——万一没数据线、不喝咖啡，就拍不到了，太死。
+- 正面示范：「一点微小的善意」「谁的专注」「一束光」「一抹颜色」「一双在做事的手」——这些每个人都能用自己的方式找到。
+- 原则：宁可**宽泛、模糊一点**，也不要具体到"只有某一种特定东西才算"。
+
+其它要求：
+- 室内会场就能拍到（人、手、光、颜色、字、表情、相伴…）；不要室外/自然题材（月亮、落叶、小动物、天空）。
+- 写成一个短语，**不要以"拍/找/记录"开头**；大白话、不说教、不煽情，不用"美好/治愈/温柔"这类空泛词。
+- 有意义：指向善意、专注、用心、坚持、相伴、满足这类微小动人的东西。
+${recentTexts.length ? '- 别和这些重复或太像：' + recentTexts.join(' / ') : ''}
+只返回 JSON：{"text":"寻物令(≤9字,宽泛短语)","hint":"小提示，可举2-3种例子(≤20字)","type":"object 或 moment","moods":["从这些选1-3个:${VOCAB.mood}"],"images":["可选,从:${VOCAB.image}"],"aura":["可选,从:${VOCAB.aura}"]}`
+  const out = await chat({
+    model: TEXT_MODEL,
+    temperature: 1.05,
+    max_tokens: 400,
+    messages: [
+      { role: 'system', content: system },
+      { role: 'user', content: user },
+    ],
+  })
+  const r = parseJSON(out)
+  if (!r.text) throw new Error('寻物令生成为空')
+  return {
+    text: String(r.text).trim(),
+    hint: String(r.hint || '').trim(),
+    type: r.type === 'moment' ? 'moment' : 'object',
+    anchor: {
+      moods: Array.isArray(r.moods) ? r.moods : [],
+      images: Array.isArray(r.images) ? r.images : [],
+      aura: Array.isArray(r.aura) ? r.aura : [],
+    },
+  }
+}
+
+/**
  * 高层：照片 + 寻物令 → 牵出一首真实古诗 + 小满共鸣话。
  * @param {string} imageDataUrl
  * @param {object} theme  寻物令对象（含 anchor 诗锚）
@@ -130,6 +185,7 @@ ${list}
  * @returns {Promise<{poem, resonance, understanding}>}
  */
 export async function matchPoem(imageDataUrl, theme, excludeIds = []) {
+  const { getCandidates, getPoemById } = await import('../data/poems.js') // 按需加载诗库
   const understanding = await describeImage(imageDataUrl)
   const candidates = getCandidates(understanding, theme?.anchor || {}, {
     limit: 24,
