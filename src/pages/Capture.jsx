@@ -6,7 +6,7 @@ import PhotoCapture from '../components/PhotoCapture.jsx'
 import PoemCard from '../components/PoemCard.jsx'
 import LoadingDots from '../components/LoadingDots.jsx'
 import { getThemeById, COPY } from '../data/themes.js'
-import { ARTIFACT_LAYOUTS, defaultArtifactLayout } from '../data/artifacts.js'
+import { defaultCardLayout } from '../data/layouts.js'
 import { compressImageToDataURL, addJian, removeFromJinnang, solarTerm } from '../services/storage.js'
 import { matchPoem } from '../services/ai.js'
 import './Capture.css'
@@ -77,9 +77,7 @@ export default function Capture() {
       themeText: theme.text,
       themeType: theme.type,
       accent: theme.accent,
-      sourceKind: 'task-photo',
-      primaryArtifact: defaultArtifactLayout(p),
-      artifacts: ARTIFACT_LAYOUTS.map((layout) => ({ id: layout.id, name: layout.name })),
+      layout: defaultCardLayout(p),
       poem: { id: p.id, mingju: p.mingju, full: p.full, title: p.title, author: p.author, dynasty: p.dynasty, form: p.form },
       resonance: result.resonance,
       postscript: postscript.trim(),
@@ -131,7 +129,7 @@ export default function Capture() {
           <motion.div className="cap-block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <PoemCard jian={{ image, poem: result.poem, resonance: result.resonance, themeText: theme.text, solarTerm: solarTerm(), createdAt: Date.now(), accent: theme.accent }} />
             <div className="cap-decide">
-              <button className="btn-primary" onClick={() => setStep('postscript')}>收进相册</button>
+              <button className="btn-primary" onClick={() => setStep('postscript')}>收进诗笺夹</button>
               <div className="cap-decide-sub">
                 <button className="cap-mini" onClick={rematch}>换一首诗</button>
                 <button className="cap-mini" onClick={() => navigate('/home')}>这次先不收</button>
@@ -156,7 +154,7 @@ export default function Capture() {
               autoFocus
             />
             <button className="btn-primary cap-full" onClick={() => setStep('sealing')}>
-              收好照片和成品，盖个章
+              装进明信片，盖个章
             </button>
           </motion.div>
         )}
@@ -170,10 +168,10 @@ export default function Capture() {
 
         {step === 'done' && savedRef.current && (
           <motion.div className="cap-done" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <p className="cap-done-tip">收好啦 ✦ 原片和成品都进相册了</p>
+            <p className="cap-done-tip">收好啦 ✦ 它住进你的诗笺夹了</p>
             <PoemCard jian={savedRef.current} savable />
             <div className="cap-done-btns">
-              <button className="btn-primary" onClick={() => navigate('/shiji')}>去相册看看</button>
+              <button className="btn-primary" onClick={() => navigate('/shiji')}>去诗笺夹看看</button>
               <button className="btn-ghost" onClick={() => navigate('/home')}>再领一道寻物令</button>
             </div>
           </motion.div>

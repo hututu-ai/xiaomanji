@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
 import { COPY } from '../data/themes.js'
-import { ARTIFACT_LAYOUTS, defaultArtifactLayout, getArtifactName } from '../data/artifacts.js'
+import { CARD_LAYOUTS, defaultCardLayout, getCardLayoutName } from '../data/layouts.js'
 import './PoemCard.css'
 
 function fmtDate(ts) {
@@ -12,15 +12,15 @@ function fmtDate(ts) {
 const novert = (s = '') => s.replace(/[，。、！？；：]/g, ' ')
 
 /**
- * 生成成品 —— 同一张任务照片，可以切成书笺 / 明信片 / 票券三种导出样式。
+ * 诗笺成品 —— 照片直接住在明信片 / 书笺 / 票券的卡面里。
  * 导出的图片含：照片 · 寻物令主题 · 诗句 · 出处 · 时令 · 日期 · 小满落款印。
- * 共鸣话 / 跋 在成品下方，作为相册条目的上下文保存。
+ * 共鸣话 / 跋 在成品下方，作为诗笺夹条目的上下文保存。
  */
 export default function PoemCard({ jian, savable = false, onDelete }) {
   const cardRef = useRef(null)
   const [saving, setSaving] = useState(false)
   const [showFull, setShowFull] = useState(false)
-  const [layout, setLayout] = useState(jian.layout || defaultArtifactLayout(jian.poem))
+  const [layout, setLayout] = useState(jian.layout || defaultCardLayout(jian.poem))
   const { image, poem, resonance, postscript, themeText, solarTerm, createdAt } = jian
   if (!poem) return null
 
@@ -31,7 +31,7 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
       const url = await toPng(cardRef.current, { pixelRatio: 2.2, cacheBust: true, backgroundColor: null })
       const a = document.createElement('a')
       const name = (themeText || poem.mingju || '一张照片').replace(/[\\/:*?"<>|]/g, '').slice(0, 12)
-      a.download = `小满相册_${name}_${getArtifactName(layout)}.png`
+      a.download = `小满诗笺夹_${name}_${getCardLayoutName(layout)}.png`
       a.href = url
       a.click()
     } catch (e) {
@@ -113,7 +113,7 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
 
       {/* 版式切换 */}
       <div className="pm-switch">
-        {ARTIFACT_LAYOUTS.map((l) => (
+        {CARD_LAYOUTS.map((l) => (
           <button key={l.id} className={`pm-sw ${layout === l.id ? 'on' : ''}`} onClick={() => setLayout(l.id)}>{l.name}</button>
         ))}
       </div>
@@ -131,8 +131,8 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
 
       {(savable || onDelete) && (
         <div className="pm-actions">
-          {savable && <button className="btn-ghost pm-act" onClick={save} disabled={saving}>{saving ? '正在生成…' : `导出${getArtifactName(layout)}`}</button>}
-          {onDelete && <button className="pm-del" onClick={() => onDelete(jian.id)}>移出相册</button>}
+          {savable && <button className="btn-ghost pm-act" onClick={save} disabled={saving}>{saving ? '正在生成…' : `导出${getCardLayoutName(layout)}`}</button>}
+          {onDelete && <button className="pm-del" onClick={() => onDelete(jian.id)}>移出诗笺夹</button>}
         </div>
       )}
     </div>

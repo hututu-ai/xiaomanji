@@ -1,11 +1,11 @@
 // ─────────────────────────────────────────────────────────────────────────────
-//  本地持久化（localStorage）。三处数据：相册条目(任务照片 + 生成成品配方) / 锦囊(待完成寻物令) / 派生统计。
+//  本地持久化（localStorage）。三处数据：诗笺夹条目(照片嵌在卡面 + 版式配方) / 锦囊(待完成寻物令) / 派生统计。
 //  未来换后端只需替换这些函数实现，接口不变。
 // ─────────────────────────────────────────────────────────────────────────────
 import imageCompression from 'browser-image-compression'
 import { poetRelation } from '../data/poems.js'
 
-const K_JIAN = 'xmj_jian_v1' // 相册：已完成任务的照片与生成成品配方
+const K_JIAN = 'xmj_jian_v1' // 诗笺夹：已完成任务的卡面与版式配方
 const K_NANG = 'xmj_jinnang_v1' // 锦囊：收下但未完成的寻物令
 
 function read(key) {
@@ -30,7 +30,7 @@ const uid = () =>
     ? crypto.randomUUID()
     : String(Date.now()) + Math.random().toString(16).slice(2)
 
-// ——— 相册（任务照片 + 明信片/票券/书笺配方）———
+// ——— 诗笺夹（照片嵌在明信片/票券/书笺里）———
 export function getJian() {
   return read(K_JIAN).sort((a, b) => b.createdAt - a.createdAt)
 }
