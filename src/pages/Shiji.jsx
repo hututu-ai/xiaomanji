@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import PoemCard from '../components/PoemCard.jsx'
 import { getJian, deleteJian, getPoetsMet } from '../services/storage.js'
 import { COPY } from '../data/themes.js'
+import { displayPoemLines } from '../utils/poemText.js'
 import './Shiji.css'
 
 // 有专属故人印（萌化）的头部诗人
@@ -63,15 +64,9 @@ export default function Shiji() {
           {it.image ? <img src={it.image} alt="" /> : <div className="sj-card-empty" />}
           {it.poem?.mingju && (
             <span className="sj-card-verse">
-              {(() => {
-                const hasStrong = /[。？！]/.test(it.poem.mingju)
-                const lines = hasStrong
-                  ? it.poem.mingju.split(/[。？！]/).filter(Boolean)
-                  : it.poem.mingju.split('，').filter(Boolean)
-                return lines.map((seg, i, arr) => (
-                  <span className="sj-verse-ln" key={i}>{seg}{!hasStrong && i < arr.length - 1 ? '，' : ''}</span>
-                ))
-              })()}
+              {displayPoemLines(it.poem.mingju || it.poem.full, 3).map((seg, i) => (
+                <span className="sj-verse-ln" key={i}>{seg}</span>
+              ))}
             </span>
           )}
         </div>
@@ -140,9 +135,8 @@ export default function Shiji() {
                   </div>
                 )
               })}
-              </div>
-            </section>
-          )}
+            </div>
+          </section>
 
           <h2 className="sj-sec-title">诗卷 · 按时令</h2>
           <div className="sj-vols">

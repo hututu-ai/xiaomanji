@@ -139,10 +139,34 @@ const SEED_V2 = [
   },
 ]
 
+const SEED_V3 = [
+  {
+    image: '/samples/r2.jpg', themeText: '花映旧墙', themeType: 'object',
+    accent: { accent: '#e2929e' }, layout: 'postcard', solarTerm: '清明',
+    poem: { id: 'seed_tidu', mingju: '人面不知何处去，桃花依旧笑春风', full: '去年今日此门中，人面桃花相映红。人面不知何处去，桃花依旧笑春风。', title: '题都城南庄', author: '崔护', dynasty: '唐', form: '诗(近体)' },
+    resonance: '旧墙不说话，桃花却年年开。像崔护写的那样，有些春天会留在原地，替人记住来过的人。',
+    postscript: '', createdAt: BASE - 14 * day,
+  },
+  {
+    image: '/samples/r8.jpg', themeText: '枝头的粉色浪潮', themeType: 'object',
+    accent: { accent: '#e2929e' }, layout: 'shujian', solarTerm: '春分',
+    poem: { id: 'seed_dufu_taohua', mingju: '桃花一簇开无主，可爱深红爱浅红', full: '黄师塔前江水东，春光懒困倚微风。桃花一簇开无主，可爱深红爱浅红。', title: '江畔独步寻花', author: '杜甫', dynasty: '唐', form: '诗(近体)' },
+    resonance: '这一树粉色开得很松弛，不像给谁看，却偏偏让人停住。杜甫也懂这种犹豫：深红浅红，到底哪一种更可爱。',
+    postscript: '', createdAt: BASE - 8 * day,
+  },
+  {
+    image: '/samples/r14.jpg', themeText: '天空里的一笔', themeType: 'moment',
+    accent: { accent: '#6f9aa8' }, layout: 'ticket', solarTerm: '霜降',
+    poem: { id: 'seed_dufu_jueju', mingju: '两个黄鹂鸣翠柳，一行白鹭上青天', full: '两个黄鹂鸣翠柳，一行白鹭上青天。窗含西岭千秋雪，门泊东吴万里船。', title: '绝句', author: '杜甫', dynasty: '唐', form: '诗(近体)' },
+    resonance: '鸟从蓝天上掠过去，像有人替天空落了一笔。杜甫写白鹭上青天，也是在这样的开阔里，忽然看见心变轻了。',
+    postscript: '', createdAt: BASE - 2 * day,
+  },
+]
+
 // 合并种子池
-const ALL_SEEDS = [...SEED_V1, ...SEED_V2]
+const ALL_SEEDS = [...SEED_V1, ...SEED_V2, ...SEED_V3]
 
 export const SEED_JIAN = ALL_SEEDS
 
 // 当前种子版本：递增此数字即可触发增量注入（新种子会加入，已有数据不会丢）
-export const SEED_VERSION = 6
+export const SEED_VERSION = 7

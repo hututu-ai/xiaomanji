@@ -1,323 +1,132 @@
-/* ═══════════ 封面 · 一本合着的线装书 ═══════════ */
-.cover-scene {
+.cover {
   flex: 1;
   min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 6px;
+  text-align: center;
+  padding: calc(40px + env(safe-area-inset-top)) 0
+    calc(48px + env(safe-area-inset-bottom));
   position: relative;
   cursor: pointer;
   user-select: none;
-  overflow: hidden;
-  background: radial-gradient(70% 40% at 50% 40%, rgba(223,240,234,0.4), transparent 65%),
-              radial-gradient(60% 40% at 50% 70%, rgba(251,231,233,0.35), transparent 65%);
-  perspective: 1400px;
+  /* 封面更通透的水彩晕染 */
+  background-image:
+    radial-gradient(80% 50% at 50% 8%, rgba(223, 240, 234, 0.55), transparent 60%),
+    radial-gradient(70% 50% at 50% 96%, rgba(251, 231, 233, 0.5), transparent 60%);
 }
 
-/* 背景暖光 */
-.cover-glow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(217,180,106,0.08), transparent 70%);
-}
-
-/* ═══════════ 合上的书 ═══════════ */
-.cover-book-closed {
+/* 名字 + 朱印 */
+.cover-mark {
   position: relative;
-  width: 290px;
-  height: 380px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
 }
-
-/* 封底露出的层叠纸边 */
-.book-edge {
-  position: absolute;
-  left: 3px;
-  top: 4px;
-  width: 282px;
-  height: 370px;
-  border-radius: 4px 6px 6px 4px;
-  background: #e8e0ce;
-  z-index: 0;
-}
-.book-edge-2 {
-  left: 5px;
-  top: 2px;
-  background: #ede5d4;
-}
-.book-edge-3 {
-  left: 7px;
-  top: 0;
-  background: #f2ebdb;
-}
-
-/* 书主体 */
-.book-body {
-  position: relative;
-  z-index: 1;
-  width: 284px;
-  height: 370px;
-  display: flex;
-  border-radius: 4px 6px 6px 4px;
-  box-shadow:
-    0 2px 20px rgba(60, 50, 30, 0.18),
-    0 8px 40px rgba(60, 50, 30, 0.12),
-    3px 0 10px rgba(0,0,0,0.06);
-}
-
-/* 左半：封底 */
-.book-back {
-  flex: 0 0 48%;
-  background: linear-gradient(175deg, #ebe2cf 0%, #e2d8c1 30%, #ddd3ba 100%);
-  border-radius: 3px 0 0 3px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.book-back-texture {
-  position: absolute;
-  inset: 0;
-  opacity: 0.3;
-  background:
-    repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(180,160,120,0.06) 8px, rgba(180,160,120,0.06) 9px),
-    radial-gradient(ellipse 90% 60% at 30% 50%, rgba(200,180,140,0.15), transparent);
-}
-.book-back-seal {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
-  opacity: 0.16;
-  transform: rotate(-5deg);
-}
-
-/* 书脊 */
-.book-spine {
-  flex: 0 0 8px;
-  background: linear-gradient(90deg, rgba(0,0,0,0.08), rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.15) 50%, rgba(0,0,0,0.05) 60%, rgba(0,0,0,0.1));
-  position: relative;
-}
-.book-spine::after {
-  content: '';
-  position: absolute;
-  top: 10%;
-  bottom: 10%;
-  left: 50%;
-  width: 1px;
-  background: rgba(180,150,90,0.25);
-  transform: translateX(-0.5px);
-}
-
-/* 右半：封面 */
-.book-front {
-  flex: 0 0 48%;
-  background: linear-gradient(165deg, #f6efe0 0%, #efe3cd 40%, #e8d8b8 100%);
-  border-radius: 0 3px 3px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-.book-front::before {
-  content: '';
-  position: absolute;
-  inset: 8px;
-  border: 1px solid rgba(180,150,90,0.2);
-  border-radius: 2px;
-  pointer-events: none;
-}
-.book-front-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  z-index: 1;
-}
-.book-front-seal {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.12));
-  margin-bottom: 4px;
-}
-.book-title {
-  font-family: var(--font-serif);
-  font-size: 28px;
+.cover-name {
+  font-size: 50px;
   font-weight: 600;
-  letter-spacing: 0.28em;
-  text-indent: 0.28em;
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
   color: var(--accent);
-  margin: 0;
 }
-.book-slogan {
-  margin: 12px 0 0;
-  font-size: 12.5px;
-  letter-spacing: 0.2em;
-  color: var(--ink-faint);
+.cover-seal {
+  margin-top: 2px;
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  transform: rotate(-4deg);
 }
-.book-tap {
-  margin-top: 18px;
-  display: flex;
+
+/* 小满立绘 */
+.cover-sprite {
+  margin: 18px 0 22px;
+}
+
+.cover-slogan {
+  font-size: 17px;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: var(--ink-soft);
+}
+
+/* 进入提示 */
+.cover-enter {
+  position: absolute;
+  bottom: calc(46px + env(safe-area-inset-bottom));
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
+  gap: 8px;
+  font-size: 14px;
+  letter-spacing: 0.16em;
   color: var(--ink-faint);
-  letter-spacing: 0.12em;
-  animation: tapPulse 2.8s ease-in-out infinite;
+  animation: coverBreathe 2.6s ease-in-out infinite;
 }
-.book-tap-dot {
-  width: 5px;
-  height: 5px;
+.cover-enter-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--gold);
-  box-shadow: 0 0 0 3px rgba(217,180,106,0.14);
+  box-shadow: 0 0 0 4px rgba(217, 180, 106, 0.16);
 }
 
-@keyframes tapPulse {
-  0%, 100% { opacity: 0.5; transform: translateY(0); }
-  50% { opacity: 1; transform: translateY(-2px); }
-}
-
-/* ═══════════ 翻开中 ═══════════ */
-.cover-book-opening {
-  position: relative;
-  width: 340px;
-  height: 380px;
-  z-index: 2;
-}
-
-/* 翻开后露出的内页 */
-.book-inside {
-  position: absolute;
+/* 翻书开场：两扇封面从中缝向外打开 */
+.book-open {
+  position: fixed;
   inset: 0;
-  display: flex;
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow:
-    0 4px 30px rgba(60,50,30,0.2),
-    0 12px 50px rgba(60,50,30,0.1);
+  z-index: 80;
+  pointer-events: none;
 }
-
-.book-page {
-  flex: 1;
-  background: #faf7ef;
+.book-half {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: linear-gradient(160deg, #f6f1e6 0%, #efe7d6 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  backface-visibility: hidden;
+  box-shadow: inset 0 0 60px rgba(120, 100, 60, 0.12);
 }
-.book-page::before {
-  content: '';
-  position: absolute;
-  inset: 10px;
-  border: 1px solid rgba(180,160,120,0.15);
-  border-radius: 2px;
-  pointer-events: none;
+.book-left {
+  left: 0;
+  transform-origin: right center;
+  border-right: 1px solid rgba(180, 150, 90, 0.4);
 }
-.book-page-left {
-  border-right: none;
+.book-right {
+  right: 0;
+  transform-origin: left center;
+  border-left: 1px solid rgba(180, 150, 90, 0.4);
 }
-.book-page-right {
-  border-left: none;
-}
-.page-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  z-index: 1;
-}
-.page-hello {
-  font-family: var(--font-serif);
-  font-size: 22px;
+.book-title {
+  font-size: 44px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   color: var(--accent);
-  margin: 0;
+  opacity: 0.85;
 }
-.page-msg {
-  margin: 6px 0 0;
-  font-size: 15px;
-  line-height: 1.9;
-  color: var(--ink-soft);
-  letter-spacing: 0.04em;
-  text-align: center;
-}
-
-/* 中缝 */
-.page-gutter {
+.book-spine {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 1px;
-  transform: translateX(-0.5px);
-  background: linear-gradient(180deg, transparent 5%, rgba(160,140,100,0.25) 20%, rgba(160,140,100,0.35) 50%, rgba(160,140,100,0.25) 80%, transparent 95%);
-  z-index: 3;
+  width: 2px;
+  transform: translateX(-1px);
+  background: linear-gradient(180deg, transparent, rgba(180, 150, 90, 0.5), transparent);
 }
 
-/* 正在翻的封面（3D rotateY） */
-.book-cover-flipping {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  transform-origin: left center;
-  transform-style: preserve-3d;
-  z-index: 5;
-  border-radius: 0 4px 4px 0;
-}
-.flip-cover-face {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(165deg, #f6efe0 0%, #efe3cd 40%, #e8d8b8 100%);
-  border-radius: 0 4px 4px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  backface-visibility: hidden;
-  box-shadow: -4px 0 20px rgba(0,0,0,0.15);
-}
-.flip-cover-face::before {
-  content: '';
-  position: absolute;
-  inset: 8px;
-  border: 1px solid rgba(180,150,90,0.22);
-  border-radius: 2px;
-  pointer-events: none;
-}
-.flip-seal {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  opacity: 0.75;
-}
-.flip-title {
-  font-family: var(--font-serif);
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 0.24em;
-  color: var(--accent);
-  opacity: 0.8;
-}
-
-/* 翻开后左侧封底变暗 */
-.book-back-open {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: #e2d8c1;
-  border-radius: 4px 0 0 4px;
-  z-index: 0;
+@keyframes coverBreathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
 }
