@@ -2,61 +2,108 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import XiaomanSprite from '../components/XiaomanSprite.jsx'
-import { COPY } from '../data/themes.js'
 import './Cover.css'
 
-// 封面页：名字 + slogan + 会动的小满。轻触 → 像翻开一本诗笺夹那样进入。
+/**
+ * 封面页 —— 一本合着的线装书。
+ * 轻触后，封面从右向左翻开，露出里面等着你的小满。
+ */
 export default function Cover() {
   const navigate = useNavigate()
-  const [opening, setOpening] = useState(false)
-  const enter = () => {
-    if (opening) return
-    setOpening(true)
+  const [phase, setPhase] = useState('closed') // closed → opening
+
+  function enter() {
+    if (phase !== 'closed') return
+    setPhase('opening')
     const dest = localStorage.getItem('xmj_onboarded') ? '/home' : '/onboarding'
-    setTimeout(() => navigate(dest), 760)
+    // 翻书动画共约 1.2s，留 0.6s 给用户看到小满，再跳转
+    setTimeout(() => navigate(dest), 1800)
   }
 
   return (
-    <motion.div
-      className="cover"
-      onClick={enter}
-      role="button"
-      tabIndex={0}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <motion.div className="cover-mark" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.15 }}>
-        <span className="cover-name calligraphy">小满集</span>
-        <img className="cover-seal" src="/seal/xiaoman-stamp.png" alt="小满印" />
+    <div className="cover-scene" onClick={enter}>
+      <div className="cover-glow" />
+
+      {/* ====== 合上的书 ====== */}
+      <motion.div
+        className="cover-book-closed"
+        animate={
+          phase === 'opening'
+            ? { opacity: 0, scale: 1.03, transition: { duration: 0.3 } }
+            : { opacity: 1, scale: 1 }
+        }
+        style={{ pointerEvents: phase === 'opening' ? 'none' : 'auto' }}
+      >
+        <div className="book-edge book-edge-3" />
+        <div className="book-edge book-edge-2" />
+        <div className="book-edge book-edge-1" />
+
+        <div className="book-body">
+          <div className="book-half book-back">
+            <div className="book-back-texture" />
+            <img className="book-back-seal" src="/seal/xiaoman-stamp.png" alt="" />
+          </div>
+          <div className="book-spine" />
+          <div className="book-half book-front">
+            <div className="book-front-inner">
+              <img className="book-front-seal" src="/seal/xiaoman-stamp.png" alt="小满印" />
+              <h1 className="book-title">小满集</h1>
+              <p className="book-slogan">物致于此，小得盈满</p>
+              <div className="book-tap">
+                <span className="book-tap-dot" />
+                轻触翻开
+              </div>
+            </div>
+          </div>
+        </div>
       </motion.div>
 
-      <motion.div className="cover-sprite" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.4, ease: 'easeOut' }}>
-        <XiaomanSprite action="daiji" size={260} fps={7} />
-      </motion.div>
-
-      <motion.div className="cover-slogan calligraphy" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.7 }}>
-        {COPY.slogan}
-      </motion.div>
-
-      <motion.div className="cover-enter" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1.2 }}>
-        <span className="cover-enter-dot" />
-        轻触，翻开小满集
-      </motion.div>
-
-      {/* 翻书：两扇封面从中缝向外打开 */}
-      {opening && (
-        <div className="book-open" style={{ perspective: 1600 }}>
-          <motion.div className="book-half book-left" initial={{ rotateY: 0 }} animate={{ rotateY: -118 }} transition={{ duration: 0.8, ease: [0.42, 0, 0.2, 1] }}>
-            <span className="book-title calligraphy">小满</span>
+      {/* ====== 翻开中 ====== */}
+      {phase === 'opening' && (
+        <div className="cover-book-opening">
+          {/* 内页 —— 小满出现 */}
+          <motion.div
+            className="book-inside"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.45, delay: 0.3 }}
+          >
+            <div className="book-page book-page-left">
+              <div className="page-inner">
+                <XiaomanSprite action="xunwuling" size={140} />
+              </div>
+            </div>
+            <div className="book-page book-page-right">
+              <div className="page-inner">
+                <p className="page-hello">你来啦。</p>
+                <p className="page-msg">我给你带了<br />今天的寻物令——</p>
+              </div>
+            </div>
+            <div className="page-gutter" />
           </motion.div>
-          <motion.div className="book-half book-right" initial={{ rotateY: 0 }} animate={{ rotateY: 118 }} transition={{ duration: 0.8, ease: [0.42, 0, 0.2, 1] }}>
-            <span className="book-title calligraphy">集</span>
+
+          {/* 正在翻开的封面 */}
+          <motion.div
+            className="book-cover-flipping"
+            initial={{ rotateY: 0 }}
+            animate={{ rotateY: -155 }}
+            transition={{ duration: 0.9, ease: [0.32, 0, 0.22, 1], delay: 0.05 }}
+          >
+            <div className="flip-cover-face">
+              <img className="flip-seal" src="/seal/xiaoman-stamp.png" alt="" />
+              <span className="flip-title">小满集</span>
+            </div>
           </motion.div>
-          <span className="book-spine" />
+
+          {/* 左侧封底变暗 */}
+          <motion.div
+            className="book-back-open"
+            initial={{ opacity: 0.85 }}
+            animate={{ opacity: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          />
         </div>
       )}
-    </motion.div>
+    </div>
   )
 }
