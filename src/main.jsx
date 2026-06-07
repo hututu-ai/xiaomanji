@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'
 import App from './App.jsx'
 import { maybeSeedJian } from './services/storage.js'
+import { bootstrapBackendSync } from './services/backend.js'
 import { warmXiaomanFrames } from './components/XiaomanSprite.jsx'
 import './styles/global.css'
 
 // 首次打开注入示例诗笺，确保 App 不空着（同步写 localStorage，先于首屏渲染）。
 maybeSeedJian()
+void bootstrapBackendSync()
 warmXiaomanFrames('daiji', 2)
 warmXiaomanFrames('xunwuling', 2)
 

@@ -3,19 +3,79 @@
 }
 .cap-head2 {
   text-align: center;
-  padding: 4px 0 0;
+  padding: 6px 0 2px;
 }
 .cap-h2-tag {
+  display: inline-block;
   font-size: 11.5px;
   letter-spacing: 0.16em;
   color: var(--gold);
+  padding: 3px 12px;
+  border: 1px solid var(--gold-soft, rgba(203, 163, 95, 0.42));
+  border-radius: 999px;
+  background: rgba(203, 163, 95, 0.08);
 }
 .cap-h2-theme {
-  margin: 4px 0 0;
+  margin: 9px 0 0;
   font-size: 22px;
   font-weight: 600;
   letter-spacing: 0.04em;
   color: var(--ink);
+}
+.cap-h2-theme::after {
+  content: '';
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin: 8px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* —— 接令后的“交照片”邀请区（无外框，少一层“框框”）—— */
+.cap-invite {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 6px 4px;
+  text-align: center;
+}
+.cap-invite-eyebrow {
+  position: relative;
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  padding-left: 0.22em;
+}
+.cap-invite-eyebrow::before,
+.cap-invite-eyebrow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 1px;
+  background: var(--gold-soft, rgba(203, 163, 95, 0.42));
+}
+.cap-invite-eyebrow::before {
+  right: calc(100% + 10px);
+}
+.cap-invite-eyebrow::after {
+  left: calc(100% + 10px);
+}
+.cap-invite-strong {
+  margin: 0 0 4px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  letter-spacing: 0.03em;
+}
+.cap-invite-foot {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint, #9b9588);
 }
 
 .cap-stage {

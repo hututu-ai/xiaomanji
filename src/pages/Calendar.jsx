@@ -1,6 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { getMonthStamps, getJian, getJianStats } from '../services/storage.js'
+import {
+  claimRewardLocal,
+  getAvailableMakeupTokens,
+  getJian,
+  getJianStats,
+  getMonthSignProgress,
+  getMonthStamps,
+  getRewards,
+} from '../services/storage.js'
+import { claimRewardInCloud } from '../services/backend.js'
 import './Calendar.css'
 
 const WEEK = ['一', '二', '三', '四', '五', '六', '日']
@@ -15,9 +24,14 @@ const EN = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT'
 export default function Calendar() {
   const today = new Date()
   const [ym, setYm] = useState({ y: today.getFullYear(), m: today.getMonth() })
+  const [, setStorageVersion] = useState(0)
   const stamps = getMonthStamps(ym.y, ym.m)
   const allJian = getJian()
   const stats = getJianStats(allJian)
+  const rewards = getRewards()
+  const makeupTokens = getAvailableMakeupTokens(today)
+  const progress = getMonthSignProgress(ym.y, ym.m, today)
+  const rewardClaimed = rewards.some((r) => r.rewardKey === progress.rewardKey)
 
   // 当前月份里出现过的古人，用来给月历补一句轻提示
   const monthPoets = (() => {
@@ -42,11 +56,32 @@ export default function Calendar() {
 
   const recorded = Object.keys(stamps).length
   const isThisMonth = ym.y === today.getFullYear() && ym.m === today.getMonth()
+  useEffect(() => {
+    const refresh = () => setStorageVersion((v) => v + 1)
+    window.addEventListener('xmj-storage-updated', refresh)
+    return () => window.removeEventListener('xmj-storage-updated', refresh)
+  }, [])
   function shift(delta) {
     let m = ym.m + delta, y = ym.y
     if (m < 0) { m = 11; y-- }
     if (m > 11) { m = 0; y++ }
     setYm({ y, m })
+  }
+  function claimMonthReward() {
+    if (!progress.full || rewardClaimed) return
+    const reward = claimRewardLocal({
+      rewardKey: progress.rewardKey,
+      rewardType: progress.makeupDays ? 'full_sign' : 'perfect_full_sign',
+      title: progress.rewardTitle,
+      meta: {
+        year: progress.year,
+        month: progress.month + 1,
+        doneDays: progress.doneDays,
+        makeupDays: progress.makeupDays,
+      },
+    })
+    if (reward) void claimRewardInCloud(reward)
+    setStorageVersion((v) => v + 1)
   }
 
   return (
@@ -65,6 +100,18 @@ export default function Calendar() {
         <span>本月有 {recorded} 天留下印记{monthPoets.length ? ` · ${monthPoets.length} 位古人来过` : ''}</span>
       </div>
 
+      <section className="cal-full">
+        <div>
+          <span className="cal-full-k">满签进度</span>
+          <strong>{progress.doneDays}/{progress.targetDays || '—'} 天</strong>
+          <em>{progress.full ? (rewardClaimed ? '限定章已收下' : '可以领取本月满签章') : `还差 ${progress.missingDays} 天`}</em>
+          <small>补签券 {makeupTokens.length} 张</small>
+        </div>
+        <button disabled={!progress.full || rewardClaimed} onClick={claimMonthReward}>
+          {rewardClaimed ? '已领取' : '领满签章'}
+        </button>
+      </section>
+
       <div className="cal-table">
         <div className="cal-week">{WEEK.map((w) => <div key={w} className="cal-wd">{w}</div>)}</div>
         <div className="cal-grid" style={{ gridTemplateRows: `repeat(${rows}, 1fr)` }}>
@@ -76,8 +123,9 @@ export default function Calendar() {
               <div key={i} className={`cal-cell ${isToday ? 'cal-today' : ''}`}>
                 <span className="cal-d">{d}</span>
                 {st && (
-                  <span className="cal-stamp">
+                  <span className={`cal-stamp ${st.status === 'makeup_done' ? 'cal-stamp--makeup' : ''}`}>
                     <img src="/seal/xiaoman-stamp.png" alt="满" />
+                    {st.status === 'makeup_done' ? <i className="cal-makeup">补</i> : null}
                     {st.count > 1 ? <i className="cal-badge">{st.count}</i> : null}
                   </span>
                 )}

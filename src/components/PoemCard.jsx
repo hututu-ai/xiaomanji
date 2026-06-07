@@ -2,7 +2,8 @@ import { useRef, useState } from 'react'
 import { toBlob } from 'html-to-image'
 import { COPY } from '../data/themes.js'
 import { CARD_LAYOUTS, defaultCardLayout } from '../data/layouts.js'
-import { compactVerse, displayPoemLines, poemExcerpt } from '../utils/poemText.js'
+import { cleanVerseLines, displayPoemLines } from '../utils/poemText.js'
+import { saveShareBlob } from '../services/backend.js'
 import './PoemCard.css'
 
 function fmtDate(ts) {
@@ -10,7 +11,6 @@ function fmtDate(ts) {
   const p = (n) => String(n).padStart(2, '0')
   return `${d.getFullYear()}.${p(d.getMonth() + 1)}.${p(d.getDate())}`
 }
-const novert = (s = '') => s.replace(/[，。、！？；：]/g, ' ')
 const SHARE_URL = 'https://xiaomanji-dyv.pages.dev/'
 const isWeChat = () => /MicroMessenger/i.test(navigator.userAgent || '')
 
@@ -221,13 +221,20 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
       if (!blob) throw new Error('无法生成图片')
       const filename = `小满集_${safeName(themeText || poem.mingju)}.png`
       const file = typeof File !== 'undefined' ? new File([blob], filename, { type: 'image/png' }) : null
+      const cloudShare = await saveShareBlob(blob, {
+        jianId: jian.id,
+        title: '小满集 · 一拍一首诗',
+        themeText,
+        poem: poem ? { id: poem.id, title: poem.title, author: poem.author, dynasty: poem.dynasty, mingju: poem.mingju } : null,
+      })
+      const shareUrl = cloudShare?.url || SHARE_URL
 
       if (file && navigator.canShare?.({ files: [file] })) {
         try {
           await navigator.share({
             files: [file],
             title: '小满集',
-            text: `我在小满集收下一张诗笺：${SHARE_URL}`,
+            text: `我在小满集收下一张诗笺：${shareUrl}`,
           })
           return
         } catch (e) {
@@ -239,8 +246,8 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
       const preview = await blobToDataUrl(blob)
       setSharePreview(preview)
       setShareHint(isWeChat()
-        ? '图片已生成。在微信里长按图片，可以保存到相册或发送给朋友；发朋友圈请先保存到相册。'
-        : '图片已生成。长按图片保存，或点下方按钮保存。')
+        ? `图片已生成。在微信里长按图片，可以保存到相册或发送给朋友；发朋友圈请先保存到相册。${cloudShare?.url ? '这张诗笺也已存成分享页。' : ''}`
+        : `图片已生成。长按图片保存，或点下方按钮保存。${cloudShare?.url ? '这张诗笺也已存成分享页。' : ''}`)
     } catch (e) {
       console.error('分享失败', e)
       try {
@@ -282,7 +289,11 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
               <div className="sj-paint">{image ? <img src={image} alt="" /> : <div className="sj-empty" />}</div>
               <div className="sj-versewrap">
                 <div className="sj-title-col">{poem.title}</div>
-                <div className="sj-verse">{poemExcerpt(poem, 4)}</div>
+                <div className="sj-verse">
+                  {cleanVerseLines(poem.full || poem.mingju, 4).map((seg, i) => (
+                    <span className="sj-vcol" key={i}>{seg}</span>
+                  ))}
+                </div>
                 <div className="sj-sealcol"><Seal /></div>
               </div>
               <div className="sj-bottom">
@@ -304,7 +315,7 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
             </div>
             <div className="pc-body">
               <div className="pc-verse-h">
-                {displayPoemLines(poem.mingju || poem.full, 4).map((seg, i) => (
+                {cleanVerseLines(poem.mingju || poem.full, 4).map((seg, i) => (
                   <span className="pc-vh-ln" key={i}>{seg}</span>
                 ))}
               </div>
@@ -324,7 +335,11 @@ export default function PoemCard({ jian, savable = false, onDelete }) {
           <div className="tk-body">
             <div className="tk-left">
               <div className="tk-show">寻物令 · {themeText}</div>
-              <div className="tk-verse">{novert(compactVerse(poem.mingju || poem.full, 2))}</div>
+              <div className="tk-verse">
+                {cleanVerseLines(poem.mingju || poem.full, 2).map((seg, i) => (
+                  <span className="tk-vln" key={i}>{seg}</span>
+                ))}
+              </div>
               <div className="tk-src">{source} · {poem.dynasty}</div>
               <div className="tk-meta"><span className="tk-term">{term}</span><span>{fmtDate(createdAt)}</span></div>
             </div>

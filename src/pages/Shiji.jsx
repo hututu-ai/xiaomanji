@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PoemCard from '../components/PoemCard.jsx'
 import { getJian, deleteJian, getJianStats } from '../services/storage.js'
+import { deleteJianFromCloud } from '../services/backend.js'
 import { COPY } from '../data/themes.js'
 import { displayPoemLines } from '../utils/poemText.js'
 import './Shiji.css'
@@ -37,9 +38,16 @@ export default function Shiji() {
   const stats = useMemo(() => getJianStats(items), [items])
   const poets = stats.poets
 
+  useEffect(() => {
+    const refresh = () => setItems(getJian())
+    window.addEventListener('xmj-storage-updated', refresh)
+    return () => window.removeEventListener('xmj-storage-updated', refresh)
+  }, [])
+
   function del(id) {
     if (!confirm('把这张诗笺移出诗笺夹吗？')) return
     setItems(deleteJian(id))
+    void deleteJianFromCloud(id)
     setActive(null)
   }
   const activeItem = items.find((i) => i.id === active)

@@ -39,9 +39,6 @@
   background: linear-gradient(135deg, var(--green-500), var(--green-700));
   color: #fff;
 }
-.nav-ico {
-  font-size: 14px;
-}
 
 @media (max-width: 370px) {
   .navbar {

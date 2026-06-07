@@ -2,9 +2,9 @@ import { NavLink, useLocation } from 'react-router-dom'
 import './NavBar.css'
 
 const TABS = [
-  { to: '/home', ico: '✦', label: '今日' },
-  { to: '/shiji', ico: '▧', label: '诗笺夹' },
-  { to: '/calendar', label: '日历' },
+  { to: '/home', label: '寻物令' },
+  { to: '/shiji', label: '诗笺夹' },
+  { to: '/calendar', label: '集章记' },
 ]
 
 export default function NavBar() {
@@ -14,7 +14,6 @@ export default function NavBar() {
     <nav className="navbar">
       {TABS.map((t) => (
         <NavLink key={t.to} to={t.to} className="nav-item">
-          {t.ico && <span className="nav-ico">{t.ico}</span>}
           <span className="nav-label">{t.label}</span>
         </NavLink>
       ))}

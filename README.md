@@ -3,8 +3,8 @@
 一只叫"小满"的东方萌宠，每天邀你去生活里找一样东西。你拍下来，小满替你牵出一首
 **早已存在的唐诗宋词**，再把这张照片装进明信片、票券或书笺，收进只属于你的诗笺夹。
 
-> 核心不是"AI 写诗"，而是"AI 牵线"：诗逐字来自核验过的诗库，绝不让模型编造。
-> 产品核心也不是"存诗"，而是保存用户完成任务后得到的一张诗意明信片；照片不单独成册，它活在卡面里。
+> 核心是"AI 牵线"：诗逐字来自核验过的诗库，绝不让模型编造。
+> 产品核心是保存用户完成任务后得到的一张诗意明信片；照片不单独成册，它活在卡面里。
 
 手机端 H5，浏览器打开即用。
 
@@ -24,19 +24,23 @@
 - 任务上下文：寻物令主题、类型、时令、完成日期。
 - 诗意上下文：匹配到的真实诗、共鸣话、用户跋、当前版式。
 
-因此这里不再做"照片库 + 明信片集合"两套收纳。用户看到和保存的就是一张带照片的诗笺；导出 PNG 时按当前样式即时生成。未来接后端时，也应优先把它建模为一条 `card` 记录，照片是卡面的内容字段，而不是独立图片资产。
+因此这里不做"照片库 + 明信片集合"两套收纳。用户看到和保存的是一张带照片的诗笺；导出 PNG 时按当前样式即时生成。接后端时，也优先把它建模为一条 `card` 记录，照片是卡面的内容字段。
 
 ## 技术栈
 - React + Vite（HashRouter，手机竖屏）、framer-motion、html-to-image、browser-image-compression
 - **AI**：阿里通义千问 `qwen-vl-max`(读图) + `qwen-plus`(选诗/共鸣话)，经 `/api/ai`
   Serverless 代理调用（key 留服务端）
 - **诗库**：`src/data/poems.json`（从 9 万首精选的 1101 首种子）
-- 存储：localStorage
+- **后端**：Cloudflare Pages Functions
+- **数据**：D1 保存用户、诗笺、签账本、奖励、分享记录；R2 保存用户照片与分享图
+- **兜底**：localStorage 仍保留，云端暂不可用时 H5 继续可用，恢复后再同步
 
 ## 目录
 ```
 小满集/
-├── api/ai.js, _dashscope.js     # Serverless AI 代理
+├── api/ai.js, _dashscope.js     # Vercel 版 AI 代理（历史兼容）
+├── functions/                   # Cloudflare Pages Functions 后端
+├── migrations/0001_backend.sql  # D1 表结构
 ├── tools/build-corpus.py        # 从 xlsx 重建/扩充种子诗库
 ├── public/
 │   ├── xiaoman/                 # 小满逐帧：daiji/xunwuling/duanxiang/shouxia-1..6.png
@@ -76,8 +80,35 @@ vercel --prod
 在 Cloudflare Pages → Settings → Environment variables 里配置：
 - `AI_API_KEY`：读图、选诗、生成寻物令。
 
+### Cloudflare 后端绑定
+上线给真实用户使用时，需要在 Cloudflare 里准备：
+
+1. D1 数据库：建议命名 `xiaomanji`
+2. R2 bucket：建议命名 `xiaomanji-media`
+3. Pages Functions 绑定：
+   - D1 binding：`XMJ_DB`
+   - R2 binding：`XMJ_MEDIA`
+4. 执行数据库迁移：
+
+```bash
+npx wrangler d1 execute xiaomanji --file=migrations/0001_backend.sql
+npx wrangler d1 execute xiaomanji --file=migrations/0002_makeup_tokens.sql
+```
+
+`wrangler.example.jsonc` 是绑定示例。等拿到真实 `database_id` 后，可以复制成 `wrangler.jsonc` 使用；在此之前不要把占位 ID 当正式配置部署。
+
+### 后端接口
+- `GET /api/user`：创建或识别匿名用户
+- `GET /api/health`：检查 D1/R2/AI 绑定状态
+- `GET /api/sync`：拉取用户诗笺、签账本、奖励
+- `POST /api/sync`：同步诗笺、删除诗笺、更新签账本、领取奖励、同步/核销补签券
+- `GET /api/media?key=...`：读取 R2 图片
+- `POST /api/share`：保存分享图并生成分享页
+- `GET /share/:id`：可转发的诗笺分享页
+
 ## 实现进度
 - **P0/P1 已完成（可跑通）**：封面 · 今日签/寻物令(两型/换签/当天未交提醒) · 拍摄→古诗匹配 ·
   明信片/书笺/票券(照片+题诗+落款印+时令) · 诗笺夹 · 知音录 · 打卡日历 · localStorage · 可部署
-- **P2 待办**：节气印全集上明信片 · 闲章/故人印 · 头部诗人萌化头像 · 信箱寄明信片 ·
+- **P1.5 已接入**：Cloudflare 后端骨架 · D1/R2 schema · 用户匿名 ID · 诗笺云同步 · 签账本 · 满签奖励记录 · 补签券账本 · 分享页
+- **P2 待办**：补签购买入口/奖励投放规则 · 节气印全集上明信片 · 闲章/故人印 · 头部诗人萌化头像 · 信箱寄明信片 ·
   onboarding 三拍 · 诗"换个味道"共创 · Live2D

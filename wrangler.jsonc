@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "xiaomanji",
+  "pages_build_output_dir": "dist",
+  "compatibility_date": "2026-06-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "XMJ_DB",
+      "database_name": "xiaomanji",
+      "database_id": "40a82f72-a812-418f-9561-9c32b162e666"
+    }
+  ]
+}

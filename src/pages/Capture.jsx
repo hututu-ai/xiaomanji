@@ -9,6 +9,7 @@ import { getThemeById, COPY } from '../data/themes.js'
 import { defaultCardLayout } from '../data/layouts.js'
 import { compressImageToDataURL, addJian, clearTodaySign, solarTerm } from '../services/storage.js'
 import { matchPoem } from '../services/ai.js'
+import { syncJianToCloud } from '../services/backend.js'
 import './Capture.css'
 
 export default function Capture() {
@@ -109,6 +110,7 @@ export default function Capture() {
       postscript: postscript.trim(),
       solarTerm: solarTerm(),
     })
+    void syncJianToCloud(savedRef.current)
     clearTodaySign()
     setStep('done')
   }

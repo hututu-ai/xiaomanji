@@ -7,6 +7,7 @@ import LoadingDots from '../components/LoadingDots.jsx'
 import { drawTheme, getThemeById, newThemeFromAI, registerTheme } from '../data/themes.js'
 import { generateXunwu } from '../services/ai.js'
 import { countJianOnDate, getTodaySign, setTodaySign } from '../services/storage.js'
+import { syncSignToCloud } from '../services/backend.js'
 import './Home.css'
 
 export default function Home() {
@@ -61,6 +62,13 @@ export default function Home() {
     registerTheme(theme)
     const rec = pending && pending.themeId === theme.id ? pending : setTodaySign(theme)
     setPending(rec)
+    void syncSignToCloud({
+      id: rec.id,
+      dayKey: rec.dayKey,
+      status: 'pending',
+      themeId: rec.themeId,
+      acceptedAt: rec.acceptedAt,
+    })
     navigate(`/capture/${theme.id}`, { state: { todaySignId: rec.id, ...extraState } })
   }
 

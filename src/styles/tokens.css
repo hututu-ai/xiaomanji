@@ -38,10 +38,11 @@
   --accent-soft: var(--green-500);
 
   /* —— 字体 —— */
-  --font-serif: 'Noto Serif SC', 'Songti SC', 'Source Han Serif SC',
-    'STSong', serif;
+  --font-serif: 'XmjSerif', 'HuiwenMincho', 'Source Han Serif SC',
+    'Songti SC', 'Noto Serif SC', 'STSong', serif;
   /* 汇文明朝体：题诗、刻本书笺用 */
-  --font-mincho: 'HuiwenMincho', 'Noto Serif SC', 'Songti SC', serif;
+  --font-mincho: 'HuiwenMincho', 'XmjSerif', 'Source Han Serif SC',
+    'Songti SC', 'Noto Serif SC', serif;
 
   /* —— 尺寸 —— */
   --radius: 18px;

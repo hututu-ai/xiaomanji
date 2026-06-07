@@ -56,6 +56,56 @@
   font-size: 12px;
   color: var(--ink-faint);
 }
+.cal-full {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(217, 180, 106, 0.42);
+  background: linear-gradient(135deg, rgba(253, 248, 237, 0.86), rgba(255, 255, 255, 0.56));
+  box-shadow: var(--shadow-soft);
+}
+.cal-full div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cal-full-k {
+  font-size: 11.5px;
+  color: var(--gold);
+  letter-spacing: 0.14em;
+}
+.cal-full strong {
+  font-size: 18px;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+.cal-full em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.cal-full small {
+  font-size: 11.5px;
+  color: var(--green-700);
+}
+.cal-full button {
+  flex: 0 0 auto;
+  padding: 9px 14px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+.cal-full button:disabled {
+  color: var(--ink-faint);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(169, 214, 203, 0.55);
+}
 
 /* 手账式表格：填满高度，数字常驻左上 */
 .cal-table {
@@ -131,6 +181,26 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+.cal-stamp--makeup img {
+  opacity: 0.68;
+  filter: sepia(0.18) saturate(0.85);
+}
+.cal-makeup {
+  position: absolute;
+  left: 4px;
+  bottom: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  font-style: normal;
+  font-size: 10px;
+  color: #fff;
+  background: var(--gold);
+  box-shadow: 0 2px 6px rgba(80, 62, 30, 0.16);
 }
 .cal-badge {
   position: absolute;

@@ -1,11 +1,18 @@
 @import './tokens.css';
 
-/* 汇文明朝体（已子集化，仅含诗库+UI字形）——用于题诗、刻本书笺 */
+/* 汇文明朝体（已子集化）用于全站主视觉，保证手机端也能拿到同一套字形。 */
 @font-face {
   font-family: 'HuiwenMincho';
   src: url('/fonts/huiwen-mincho.woff2') format('woff2');
   font-weight: 400 700;
-  font-display: swap;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'XmjSerif';
+  src: url('/fonts/huiwen-mincho.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: block;
 }
 
 * {

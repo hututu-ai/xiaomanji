@@ -63,3 +63,8 @@ export function displayPoemLines(text, maxLines = 4) {
 export function compactVerse(text, maxLines = 2) {
   return poemLines(text, maxLines).join(' ').replace(/[，。！？；：]/gu, ' ').replace(/\s+/g, ' ').trim()
 }
+
+// 一句一行、且每行去掉句末标点 —— 让对仗的诗句左右对称、整齐排列。
+export function cleanVerseLines(text, maxLines = 4) {
+  return poemLines(text, maxLines).map((line) => line.replace(/[，。、！？；：]+$/u, ''))
+}

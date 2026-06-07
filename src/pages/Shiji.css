@@ -124,6 +124,26 @@
   font-size: 11px;
   color: var(--gold);
 }
+/* 「更多古人印 · 敬请期待」占位 */
+.sj-poet-soon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 4px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--green-700);
+  border: 1.5px dashed var(--green-300);
+  background: rgba(111, 179, 166, 0.08);
+}
+.sj-poet--soon .sj-poet-name {
+  color: var(--ink-soft);
+}
+.sj-poet--soon .sj-poet-tier {
+  color: var(--green-700);
+}
 
 /* 诗笺墙：每张 = 照片 + 题在上面的诗句 */
 .sj-grid {
@@ -258,6 +278,7 @@
   overflow: hidden;
   border: 2px solid #fff;
   box-shadow: var(--shadow-card);
+  background: var(--green-100);
 }
 .sj-vol-cover img {
   width: 100%;
@@ -336,8 +357,7 @@
   position: fixed;
   inset: 0;
   z-index: 50;
-  background: rgba(40, 38, 32, 0.6);
-  backdrop-filter: blur(7px);
+  background: rgba(36, 34, 28, 0.74);
   display: flex;
   align-items: flex-start; /* 配合 inner 的 margin:auto，高内容也能从顶部完整滚动 */
   justify-content: center;
