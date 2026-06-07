@@ -9,7 +9,6 @@ import { getThemeById, COPY } from '../data/themes.js'
 import { defaultCardLayout } from '../data/layouts.js'
 import { compressImageToDataURL, addJian, clearTodaySign, solarTerm } from '../services/storage.js'
 import { matchPoem } from '../services/ai.js'
-import { speakXiaoman } from '../services/xiaomanVoice.js'
 import './Capture.css'
 
 export default function Capture() {
@@ -34,13 +33,11 @@ export default function Capture() {
   async function runMatch(dataUrl) {
     setError('')
     setStep('thinking')
-    speakXiaoman('让我看看。这里好像藏着一句诗。')
     try {
       const r = await matchPoem(dataUrl, theme, excludeRef.current)
       if (r.poem) excludeRef.current.push(r.poem.id)
       setResult(r)
       setStep('result')
-      speakXiaoman(`我想起这一句，${r.poem?.mingju || ''}`)
     } catch (e) {
       console.error(e)
       setError(e.message || '小满刚刚走神了，再试一次好吗～')
@@ -93,7 +90,6 @@ export default function Capture() {
   }
 
   function rematch() {
-    speakXiaoman('嗯，我再替它翻一翻。')
     if (image) runMatch(image)
   }
 
@@ -115,7 +111,6 @@ export default function Capture() {
     })
     clearTodaySign()
     setStep('done')
-    speakXiaoman('收好啦。这一页，住进你的诗笺夹了。')
   }
 
   return (
@@ -176,7 +171,7 @@ export default function Capture() {
           <motion.div className="cap-block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <PoemCard jian={{ image, poem: result.poem, resonance: result.resonance, themeText: theme.text, solarTerm: solarTerm(), createdAt: Date.now(), accent: theme.accent }} />
             <div className="cap-decide">
-              <button className="btn-primary" onClick={() => { speakXiaoman('好呀。给它留一句你的话吧。'); setStep('postscript') }}>收进诗笺夹</button>
+              <button className="btn-primary" onClick={() => setStep('postscript')}>收进诗笺夹</button>
               <div className="cap-decide-sub">
                 <button className="cap-mini" onClick={rematch}>换一首诗</button>
                 <button className="cap-mini" onClick={() => navigate('/home')}>这次先不收</button>
@@ -200,7 +195,7 @@ export default function Capture() {
               rows={3}
               autoFocus
             />
-            <button className="btn-primary cap-full" onClick={() => { speakXiaoman('我来给它盖上小满印。'); setStep('sealing') }}>
+            <button className="btn-primary cap-full" onClick={() => setStep('sealing')}>
               装进明信片，盖个章
             </button>
           </motion.div>

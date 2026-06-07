@@ -32,33 +32,6 @@ function devAiProxy(env) {
         })
       })
 
-      server.middlewares.use('/api/tts', async (req, res) => {
-        if (req.method !== 'POST') {
-          res.statusCode = 405
-          res.end(JSON.stringify({ error: 'Method Not Allowed' }))
-          return
-        }
-        let body = ''
-        req.on('data', (chunk) => (body += chunk))
-        req.on('end', async () => {
-          try {
-            const { createXiaomanSpeech } = await import('./api/_openaiTts.js')
-            const payload = JSON.parse(body || '{}')
-            const result = await createXiaomanSpeech(payload, env.OPENAI_API_KEY, {
-              voice: env.OPENAI_TTS_VOICE,
-              model: env.OPENAI_TTS_MODEL,
-            })
-            res.statusCode = 200
-            res.setHeader('Content-Type', result.contentType)
-            res.setHeader('Cache-Control', 'private, max-age=86400')
-            res.end(Buffer.from(result.audio))
-          } catch (err) {
-            res.statusCode = err.status || 500
-            res.setHeader('Content-Type', 'application/json')
-            res.end(JSON.stringify({ error: err.message || 'TTS proxy error' }))
-          }
-        })
-      })
     },
   }
 }

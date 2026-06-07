@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import XiaomanSprite from '../components/XiaomanSprite.jsx'
 import { COPY } from '../data/themes.js'
-import { primeXiaomanVoice, speakXiaoman } from '../services/xiaomanVoice.js'
 import './Cover.css'
 
 // 封面页：名字 + slogan + 会动的小满。轻触 → 像翻开一本诗笺夹那样进入。
@@ -12,8 +11,6 @@ export default function Cover() {
   const [opening, setOpening] = useState(false)
   const enter = () => {
     if (opening) return
-    primeXiaomanVoice()
-    speakXiaoman('你来啦。一起翻开小满集吧。')
     setOpening(true)
     const dest = localStorage.getItem('xmj_onboarded') ? '/home' : '/onboarding'
     setTimeout(() => navigate(dest), 720)

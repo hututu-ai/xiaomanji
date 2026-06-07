@@ -30,7 +30,6 @@
 - React + Vite（HashRouter，手机竖屏）、framer-motion、html-to-image、browser-image-compression
 - **AI**：阿里通义千问 `qwen-vl-max`(读图) + `qwen-plus`(选诗/共鸣话)，经 `/api/ai`
   Serverless 代理调用（key 留服务端）
-- **小满声音**：OpenAI `gpt-4o-mini-tts`，经 `/api/tts` 代理生成 mp3；前端仅播放音频，不暴露 key。
 - **诗库**：`src/data/poems.json`（从 9 万首精选的 1101 首种子）
 - 存储：localStorage
 
@@ -58,7 +57,7 @@ npm install
 cp .env.example .env      # 填 DASHSCOPE_API_KEY（阿里云百炼）
 npm run dev               # http://localhost:5173
 ```
-> 没填 `AI_API_KEY` 时，界面都能跑，但"牵诗"那一步会提示出错；没填 `OPENAI_API_KEY` 时，小满声音按钮会显示"未接通"。
+> 没填 `AI_API_KEY` 时，界面都能跑，但"牵诗"那一步会提示出错。
 
 ## 重建/扩充诗库
 ```bash
@@ -70,15 +69,12 @@ python3 tools/build-corpus.py ~/Desktop/诗词分类大全.xlsx
 ```bash
 vercel
 vercel env add DASHSCOPE_API_KEY   # 选 Production
-vercel env add OPENAI_API_KEY      # 小满 TTS 声音
 vercel --prod
 ```
 
 ## 部署 Cloudflare Pages
 在 Cloudflare Pages → Settings → Environment variables 里配置：
 - `AI_API_KEY`：读图、选诗、生成寻物令。
-- `OPENAI_API_KEY`：小满 TTS 声音。
-- 可选 `OPENAI_TTS_VOICE=shimmer`、`OPENAI_TTS_MODEL=gpt-4o-mini-tts`。
 
 ## 实现进度
 - **P0/P1 已完成（可跑通）**：封面 · 今日签/寻物令(两型/换签/当天未交提醒) · 拍摄→古诗匹配 ·
