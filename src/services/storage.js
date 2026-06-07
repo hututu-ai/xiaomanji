@@ -63,10 +63,6 @@ export function maybeSeedJian() {
     if (storedVer >= SEED_VERSION) return
 
     const existing = read(K_JIAN)
-    if (storedVer === 0 && existing.length > 0) {
-      localStorage.setItem(K_SEED_VER, String(SEED_VERSION))
-      return
-    }
 
     // 分离：种子条目（/samples/ 路径） vs 用户自创诗笺（dataURL 或其他路径）
     const userItems = []

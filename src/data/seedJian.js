@@ -190,5 +190,5 @@ const SEED_REAL = [
 
 export const SEED_JIAN = SEED_REAL
 
-// 版本 8：用真实照片诗笺替换旧 demo 种子。
-export const SEED_VERSION = 8
+// 版本 9：强制修复旧浏览器里“版本已写入但旧 5 张种子仍保留”的状态。
+export const SEED_VERSION = 9
