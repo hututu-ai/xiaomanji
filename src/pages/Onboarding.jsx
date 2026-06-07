@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import XiaomanSprite from '../components/XiaomanSprite.jsx'
 import { ONBOARDING } from '../data/themes.js'
+import { speakXiaoman } from '../services/xiaomanVoice.js'
 import './Onboarding.css'
 
 export default function Onboarding() {
@@ -12,12 +13,17 @@ export default function Onboarding() {
   const last = i === ONBOARDING.length - 1
 
   function done() {
+    speakXiaoman('好呀。我们去看看今天的寻物令。')
     localStorage.setItem('xmj_onboarded', '1')
     navigate('/home')
   }
   function next() {
     if (last) done()
-    else setI(i + 1)
+    else {
+      const nextBeat = ONBOARDING[i + 1]
+      speakXiaoman(nextBeat.say)
+      setI(i + 1)
+    }
   }
 
   return (

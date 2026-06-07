@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import XiaomanSprite from '../components/XiaomanSprite.jsx'
 import { COPY } from '../data/themes.js'
+import { primeXiaomanVoice, speakXiaoman } from '../services/xiaomanVoice.js'
 import './Cover.css'
 
 // 封面页：名字 + slogan + 会动的小满。轻触 → 像翻开一本诗笺夹那样进入。
@@ -11,9 +12,11 @@ export default function Cover() {
   const [opening, setOpening] = useState(false)
   const enter = () => {
     if (opening) return
+    primeXiaomanVoice()
+    speakXiaoman('你来啦。一起翻开小满集吧。')
     setOpening(true)
     const dest = localStorage.getItem('xmj_onboarded') ? '/home' : '/onboarding'
-    setTimeout(() => navigate(dest), 760)
+    setTimeout(() => navigate(dest), 720)
   }
 
   return (
@@ -45,16 +48,23 @@ export default function Cover() {
         轻触，翻开小满集
       </motion.div>
 
-      {/* 翻书：两扇封面从中缝向外打开 */}
+      {/* 开场：宣纸自中心晕开，朱印轻轻落下 */}
       {opening && (
-        <div className="book-open" style={{ perspective: 1600 }}>
-          <motion.div className="book-half book-left" initial={{ rotateY: 0 }} animate={{ rotateY: -118 }} transition={{ duration: 0.8, ease: [0.42, 0, 0.2, 1] }}>
-            <span className="book-title calligraphy">小满</span>
-          </motion.div>
-          <motion.div className="book-half book-right" initial={{ rotateY: 0 }} animate={{ rotateY: 118 }} transition={{ duration: 0.8, ease: [0.42, 0, 0.2, 1] }}>
-            <span className="book-title calligraphy">集</span>
-          </motion.div>
-          <span className="book-spine" />
+        <div className="cover-bloom">
+          <motion.span
+            className="cover-bloom-disc"
+            initial={{ scale: 0 }}
+            animate={{ scale: 26 }}
+            transition={{ duration: 0.66, ease: [0.4, 0, 0.2, 1] }}
+          />
+          <motion.img
+            className="cover-bloom-seal"
+            src="/seal/xiaoman-stamp.png"
+            alt=""
+            initial={{ scale: 0.5, opacity: 0, rotate: -16 }}
+            animate={{ scale: 1, opacity: 1, rotate: -4 }}
+            transition={{ duration: 0.34, delay: 0.16, ease: 'backOut' }}
+          />
         </div>
       )}
     </motion.div>

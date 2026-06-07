@@ -15,6 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   padding: 4px 2px 0;
 }
 .h2-mark {
@@ -40,6 +41,11 @@
   color: #fff;
   border-color: transparent;
   background: linear-gradient(135deg, var(--green-500), var(--green-700));
+}
+.h2-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* 入场：递寻物令 */
@@ -145,6 +151,10 @@
   text-align: center;
   letter-spacing: 0.02em;
   max-width: 320px;
+  text-wrap: balance;
+}
+.h2-say--think {
+  max-width: 260px;
 }
 
 .h2-btns {

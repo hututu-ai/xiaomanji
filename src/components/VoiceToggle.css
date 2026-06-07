@@ -1,0 +1,28 @@
+.voice-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(169, 214, 203, 0.68);
+  background: rgba(252, 250, 244, 0.7);
+  color: var(--ink-soft);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.voice-toggle.is-on {
+  color: var(--accent);
+  border-color: rgba(95, 169, 155, 0.55);
+  background: rgba(244, 250, 247, 0.88);
+}
+.voice-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+}
+.voice-toggle.is-on .voice-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(95, 169, 155, 0.12);
+}

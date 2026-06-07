@@ -2,11 +2,13 @@ import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import XiaomanSprite from '../components/XiaomanSprite.jsx'
+import VoiceToggle from '../components/VoiceToggle.jsx'
 import XunwuScroll from '../components/XunwuScroll.jsx'
 import LoadingDots from '../components/LoadingDots.jsx'
 import { drawTheme, getThemeById, newThemeFromAI, registerTheme } from '../data/themes.js'
 import { generateXunwu } from '../services/ai.js'
 import { countJianOnDate, getTodaySign, setTodaySign } from '../services/storage.js'
+import { speakXiaoman } from '../services/xiaomanVoice.js'
 import './Home.css'
 
 export default function Home() {
@@ -38,6 +40,7 @@ export default function Home() {
       seen.current = [...seen.current.slice(-8), t.text]
       setTheme(t)
       if (pending) setPending(setTodaySign(t))
+      speakXiaoman(`我想到一张新的寻物令，${t.text}`)
       return t
     } catch (e) {
       console.error('寻物令实时生成失败，回退内置：', e)
@@ -46,6 +49,7 @@ export default function Home() {
       seen.current = [...seen.current.slice(-8), t.text]
       setTheme(t)
       if (pending) setPending(setTodaySign(t))
+      speakXiaoman(`这张怎么样，${t.text}`)
       return t
     } finally {
       setGenerating(false)
@@ -54,10 +58,12 @@ export default function Home() {
 
   function reveal() {
     setRevealed(true)
+    speakXiaoman('我给你带了今天的寻物令。轻轻点开看看吧。')
     if (!theme && !pending) genTheme()
   }
   function startTodaySign(extraState = {}) {
     if (!theme) return
+    speakXiaoman('好呀。把你看见的那一幕，拍给我看看。')
     registerTheme(theme)
     const rec = pending && pending.themeId === theme.id ? pending : setTodaySign(theme)
     setPending(rec)
@@ -68,9 +74,12 @@ export default function Home() {
     <motion.div className="page home2 no-scrollbar" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
       <header className="h2-head">
         <span className="h2-mark calligraphy">小满集</span>
-        <span className={`h2-status ${completedToday ? 'done' : pending ? 'pending' : ''}`}>
-          {completedToday ? '已盖章' : pending ? '待交' : '今日签'}
-        </span>
+        <div className="h2-head-actions">
+          <VoiceToggle />
+          <span className={`h2-status ${completedToday ? 'done' : pending ? 'pending' : ''}`}>
+            {completedToday ? '已盖章' : pending ? '待交' : '今日签'}
+          </span>
+        </div>
       </header>
 
       {!revealed ? (
@@ -97,7 +106,7 @@ export default function Home() {
               // —— 小满正在"想"今天找什么 ——
               <div className="h2-thinking">
                 <XiaomanSprite action="daiji" size={150} />
-                <p className="h2-say">小满正在想，今天请你找点什么好……</p>
+                <p className="h2-say h2-say--think">小满正在想——<br />今天请你找点什么好</p>
                 <LoadingDots label="灵机一动中" />
               </div>
             ) : theme ? (
