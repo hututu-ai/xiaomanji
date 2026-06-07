@@ -112,3 +112,7 @@ npx wrangler d1 execute xiaomanji --file=migrations/0002_makeup_tokens.sql
 - **P1.5 已接入**：Cloudflare 后端骨架 · D1/R2 schema · 用户匿名 ID · 诗笺云同步 · 签账本 · 满签奖励记录 · 补签券账本 · 分享页
 - **P2 待办**：补签购买入口/奖励投放规则 · 节气印全集上明信片 · 闲章/故人印 · 头部诗人萌化头像 · 信箱寄明信片 ·
   onboarding 三拍 · 诗"换个味道"共创 · Live2D
+
+## App 化路线
+
+见 [docs/app-roadmap.md](docs/app-roadmap.md)。这份文档记录从当前 H5 迁到 Expo App 的阶段、可复用代码、原生能力、账号系统、R2 媒体存储和上架前清单。
