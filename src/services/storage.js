@@ -161,9 +161,9 @@ export function getMonthStamps(year, month) {
 }
 
 // ——— 集古人（知音录）———
-export function getPoetsMet() {
+function poetsMetFrom(list) {
   const byAuthor = {}
-  for (const j of getJian()) {
+  for (const j of list) {
     const a = j.poem?.author
     if (!a) continue
     if (!byAuthor[a]) byAuthor[a] = new Set()
@@ -172,6 +172,19 @@ export function getPoetsMet() {
   const counts = {}
   for (const a in byAuthor) counts[a] = byAuthor[a].size
   return poetRelation(counts).sort((x, y) => y.count - x.count)
+}
+export function getPoetsMet(list = getJian()) {
+  return poetsMetFrom(list)
+}
+export function getJianStats(list = getJian()) {
+  const days = new Set(list.map((it) => dayKey(new Date(it.createdAt)))).size
+  const poets = poetsMetFrom(list)
+  return {
+    total: list.length,
+    days,
+    poets,
+    poetCount: poets.length,
+  }
 }
 
 // ——— 时令（节气）———

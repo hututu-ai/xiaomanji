@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { getMonthStamps, getJian } from '../services/storage.js'
+import { getMonthStamps, getJian, getJianStats } from '../services/storage.js'
 import './Calendar.css'
 
 const WEEK = ['一', '二', '三', '四', '五', '六', '日']
@@ -16,11 +16,13 @@ export default function Calendar() {
   const today = new Date()
   const [ym, setYm] = useState({ y: today.getFullYear(), m: today.getMonth() })
   const stamps = getMonthStamps(ym.y, ym.m)
+  const allJian = getJian()
+  const stats = getJianStats(allJian)
 
-  // 本月遇见的古人
-  const poets = (() => {
+  // 当前月份里出现过的古人，用来给月历补一句轻提示
+  const monthPoets = (() => {
     const map = {}
-    for (const j of getJian()) {
+    for (const j of allJian) {
       const t = new Date(j.createdAt)
       if (t.getFullYear() === ym.y && t.getMonth() === ym.m && j.poem?.author) {
         ;(map[j.poem.author] = map[j.poem.author] || new Set()).add(j.poem.id)
@@ -58,7 +60,10 @@ export default function Calendar() {
         <button className="cal-nav" onClick={() => shift(1)} disabled={isThisMonth}>›</button>
       </header>
 
-      <p className="cal-stat">这个月，你拿到小满印 <b>{recorded}</b> 天</p>
+      <div className="cal-stat">
+        共盖小满印 <b>{stats.days}</b> 天 · 收 <b>{stats.total}</b> 笺 · 遇见 <b>{stats.poetCount}</b> 位古人
+        <span>本月有 {recorded} 天留下印记{monthPoets.length ? ` · ${monthPoets.length} 位古人来过` : ''}</span>
+      </div>
 
       <div className="cal-table">
         <div className="cal-week">{WEEK.map((w) => <div key={w} className="cal-wd">{w}</div>)}</div>
@@ -82,17 +87,17 @@ export default function Calendar() {
         </div>
       </div>
 
-      {/* 本月古人图鉴 —— 它也是你的收藏本 */}
+      {/* 古人图鉴 —— 与诗笺夹使用同一套统计 */}
       <section className="cal-poets">
         <div className="cal-poets-head">
-          <span>本月遇见的古人</span>
-          <span className="cal-poets-n">{poets.length} 位</span>
+          <span>你遇见的古人</span>
+          <span className="cal-poets-n">{stats.poetCount} 位</span>
         </div>
-        {poets.length === 0 ? (
-          <p className="cal-poets-empty">还没遇见谁——完成今日签，小满会替你牵一首诗，也在日历盖上今天的印。</p>
+        {stats.poets.length === 0 ? (
+          <p className="cal-poets-empty">还没遇见谁——完成寻物令，小满会替你牵一首诗，也在集章记盖上今天的印。</p>
         ) : (
           <div className="cal-poets-row no-scrollbar">
-            {poets.map((p) => (
+            {stats.poets.map((p) => (
               <div className="cal-poet" key={p.author}>
                 {SEALED.has(p.author) ? (
                   <img className="cal-poet-img" src={`/seal/poet-${p.author}.png`} alt={p.author} />

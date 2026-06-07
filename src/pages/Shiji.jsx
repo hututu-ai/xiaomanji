@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PoemCard from '../components/PoemCard.jsx'
-import { getJian, deleteJian, getPoetsMet } from '../services/storage.js'
+import { getJian, deleteJian, getJianStats } from '../services/storage.js'
 import { COPY } from '../data/themes.js'
 import { displayPoemLines } from '../utils/poemText.js'
 import './Shiji.css'
@@ -32,9 +32,10 @@ function seasonOf(it) {
 export default function Shiji() {
   const navigate = useNavigate()
   const [items, setItems] = useState(() => getJian())
-  const [poets] = useState(() => getPoetsMet())
   const [active, setActive] = useState(null)
   const [vol, setVol] = useState(null) // 打开的诗卷（季节）
+  const stats = useMemo(() => getJianStats(items), [items])
+  const poets = stats.poets
 
   function del(id) {
     if (!confirm('把这张诗笺移出诗笺夹吗？')) return
@@ -42,10 +43,6 @@ export default function Shiji() {
     setActive(null)
   }
   const activeItem = items.find((i) => i.id === active)
-  const days = useMemo(
-    () => new Set(items.map((it) => new Date(it.createdAt).toDateString())).size,
-    [items]
-  )
   // 按季节分卷
   const volumes = useMemo(() => {
     const order = ['春', '夏', '秋', '冬']
@@ -61,7 +58,7 @@ export default function Shiji() {
     return (
       <button className="sj-card" key={it.id} onClick={() => setActive(it.id)}>
         <div className="sj-card-photo">
-          {it.image ? <img src={it.image} alt="" /> : <div className="sj-card-empty" />}
+          {it.image ? <img src={it.image} alt="" loading="lazy" decoding="async" /> : <div className="sj-card-empty" />}
           {it.poem?.mingju && (
             <span className="sj-card-verse">
               {displayPoemLines(it.poem.mingju || it.poem.full, 3).map((seg, i) => (
@@ -113,12 +110,12 @@ export default function Shiji() {
           </header>
 
           <div className="sj-meta">
-            已收 <b>{items.length}</b> 张 · 记录 <b>{days}</b> 天 · 遇见 <b>{poets.length}</b> 位古人
+            已收 <b>{stats.total}</b> 张 · 记录 <b>{stats.days}</b> 天 · 遇见 <b>{stats.poetCount}</b> 位古人
           </div>
 
           {/* —— 知音录：15位诗人全部展示，遇见的点亮，未遇的置灰 —— */}
           <section className="sj-zhiyin">
-            <h2 className="sj-sec-title">你遇见的古人 · {poets.length}/15</h2>
+            <h2 className="sj-sec-title">你遇见的古人 · {stats.poetCount}/15</h2>
             <div className="sj-poets no-scrollbar">
               {[...SEALED].sort().map((author) => {
                 const met = poets.find((p) => p.author === author)
@@ -128,6 +125,7 @@ export default function Shiji() {
                       className="sj-poet-img"
                       src={`/seal/poet-${author}.png`}
                       alt={author}
+                      decoding="async"
                       onError={(e) => { e.target.style.display = 'none' }}
                     />
                     <div className="sj-poet-name">{author}</div>
@@ -135,6 +133,11 @@ export default function Shiji() {
                   </div>
                 )
               })}
+              <div className="sj-poet sj-poet--soon" key="__soon">
+                <div className="sj-poet-soon">＋</div>
+                <div className="sj-poet-name">更多古人印</div>
+                <div className="sj-poet-tier">敬请期待</div>
+              </div>
             </div>
           </section>
 
@@ -145,7 +148,7 @@ export default function Shiji() {
                 <span className="sj-vol-sheet sj-vol-sheet2" />
                 <span className="sj-vol-sheet sj-vol-sheet1" />
                 <span className="sj-vol-cover">
-                  {v.cover ? <img src={v.cover} alt="" /> : <span className="sj-vol-empty" />}
+                  {v.cover ? <img src={v.cover} alt="" decoding="async" /> : <span className="sj-vol-empty" />}
                   <span className="sj-vol-tag">{v.season}之卷</span>
                 </span>
                 <span className="sj-vol-count">{v.items.length} 笺</span>
