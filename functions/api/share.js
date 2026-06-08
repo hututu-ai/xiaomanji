@@ -1,7 +1,7 @@
-import { json, readJson, handleThrown, requireBinding } from '../_shared/http.js'
+import { json, readJson, handleThrown } from '../_shared/http.js'
 import { getClientId, newClientId, userCookie } from '../_shared/identity.js'
 import { db, ensureUser } from '../_shared/db.js'
-import { putDataUrl } from '../_shared/media.js'
+import { putMediaDataUrl } from '../_shared/media.js'
 
 export async function onRequest(context) {
   try {
@@ -10,12 +10,20 @@ export async function onRequest(context) {
 
     const userId = getClientId(request) || newClientId()
     const database = db(env)
-    const bucket = requireBinding(env, 'XMJ_MEDIA')
+    const bucket = env.XMJ_MEDIA || null
     await ensureUser(database, userId)
 
     const body = await readJson(request)
     const id = crypto.randomUUID()
-    const stored = await putDataUrl(bucket, body.imageDataUrl, `users/${userId}/shares`, id)
+    const stored = await putMediaDataUrl({
+      database,
+      bucket,
+      dataUrl: body.imageDataUrl,
+      keyPrefix: `users/${userId}/shares`,
+      id,
+      userId,
+      meta: { kind: 'share' },
+    })
     if (!stored?.key) return json({ error: '分享图片格式不正确' }, 400)
 
     const now = Date.now()
@@ -41,4 +49,3 @@ export async function onRequest(context) {
     return handleThrown(err)
   }
 }
-

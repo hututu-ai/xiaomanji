@@ -1,11 +1,7 @@
 import { json, readJson, handleThrown } from '../_shared/http.js'
 import { getClientId, newClientId, userCookie } from '../_shared/identity.js'
 import { db, ensureUser, dayKeyFromTs, safeJson } from '../_shared/db.js'
-import { putDataUrl } from '../_shared/media.js'
-
-function mediaUrl(key) {
-  return key ? `/api/media?key=${encodeURIComponent(key)}` : ''
-}
+import { mediaUrl, putMediaDataUrl } from '../_shared/media.js'
 
 const SIGN_RANK = {
   removed: 0,
@@ -119,7 +115,26 @@ async function upsertJian({ database, bucket, userId, payload }) {
 
   let imageKey = input.imageKey || ''
   if (bucket && typeof input.image === 'string' && input.image.startsWith('data:')) {
-    const stored = await putDataUrl(bucket, input.image, `users/${userId}/jian`, input.id || crypto.randomUUID())
+    const stored = await putMediaDataUrl({
+      database,
+      bucket,
+      dataUrl: input.image,
+      keyPrefix: `users/${userId}/jian`,
+      id: input.id || crypto.randomUUID(),
+      userId,
+      meta: { kind: 'jian' },
+    })
+    imageKey = stored?.key || imageKey
+  } else if (!bucket && typeof input.image === 'string' && input.image.startsWith('data:')) {
+    const stored = await putMediaDataUrl({
+      database,
+      bucket: null,
+      dataUrl: input.image,
+      keyPrefix: `users/${userId}/jian`,
+      id: input.id || crypto.randomUUID(),
+      userId,
+      meta: { kind: 'jian' },
+    })
     imageKey = stored?.key || imageKey
   }
 

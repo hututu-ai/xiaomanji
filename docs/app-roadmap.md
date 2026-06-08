@@ -11,13 +11,23 @@ https://xiaomanji-dyv.pages.dev/
 - 数据库：Cloudflare D1 已创建并迁移，绑定名 `XMJ_DB`。
 - AI：`/api/ai` 服务端代理已接入，`AI_API_KEY` 留在 Cloudflare 环境变量里。
 - 云同步：诗笺、签账本、满签奖励、补签券账本已有接口。
+- 媒体兜底：R2 未启用时，压缩后的照片和分享图会临时写入 D1 的 `media_blobs`。
 - 本地兜底：localStorage 仍保留，云端异常时 H5 可以继续使用。
 
 ## 仍缺的关键能力
 
 ### 1. R2 媒体存储
 
-当前线上健康检查结果里 `media:false`，原因是 Cloudflare 账号还没有启用 R2。App 上线前要完成：
+当前线上健康检查结果里 `media:false`，原因是 Cloudflare 账号还没有启用 R2。为了继续推进 App，当前先使用 D1 临时媒体表承接压缩图；等 R2 开通后，再切到对象存储。
+
+当前过渡方案：
+
+- 小图写入 D1 `media_blobs`。
+- `/api/media?key=...` 同时支持 R2 key 和 D1 key。
+- `/api/share` 在 R2 缺席时仍可生成可访问分享页。
+- 前端上传分享图前会压成轻量 JPEG，降低 D1 写入失败概率。
+
+App 大规模上线前建议完成：
 
 - 在 Cloudflare Dashboard 启用 R2。
 - 创建 bucket：`xiaomanji-media`。
@@ -161,14 +171,14 @@ App 主流程需要这些能力：
 
 ## 后端下一步
 
-1. 启用 R2 并绑定 `XMJ_MEDIA`。
-2. 为 `/api/sync` 增加账号合并能力。
-3. 增加 `/api/auth/*`：
+1. 为 `/api/sync` 增加账号合并能力。
+2. 增加 `/api/auth/*`：
    - 微信登录
    - Apple 登录
    - 匿名用户绑定正式账号
-4. 给图片上传增加大小限制和类型校验。
-5. 给 AI 与分享接口增加基础限流。
+3. 给图片上传增加更完整的大小限制和类型校验。
+4. 给 AI 与分享接口增加基础限流。
+5. 后续启用 R2 并把 D1 媒体迁移到 `XMJ_MEDIA`。
 
 ## 移动端下一步
 
@@ -189,4 +199,3 @@ App 主流程需要这些能力：
 - App 图标与启动页。
 - 应用商店截图。
 - ICP / 备案情况确认。
-

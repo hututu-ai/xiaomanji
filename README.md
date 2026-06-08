@@ -93,6 +93,7 @@ vercel --prod
 ```bash
 npx wrangler d1 execute xiaomanji --file=migrations/0001_backend.sql
 npx wrangler d1 execute xiaomanji --file=migrations/0002_makeup_tokens.sql
+npx wrangler d1 execute xiaomanji --file=migrations/0003_d1_media_blobs.sql
 ```
 
 `wrangler.example.jsonc` 是绑定示例。等拿到真实 `database_id` 后，可以复制成 `wrangler.jsonc` 使用；在此之前不要把占位 ID 当正式配置部署。
@@ -102,14 +103,14 @@ npx wrangler d1 execute xiaomanji --file=migrations/0002_makeup_tokens.sql
 - `GET /api/health`：检查 D1/R2/AI 绑定状态
 - `GET /api/sync`：拉取用户诗笺、签账本、奖励
 - `POST /api/sync`：同步诗笺、删除诗笺、更新签账本、领取奖励、同步/核销补签券
-- `GET /api/media?key=...`：读取 R2 图片
+- `GET /api/media?key=...`：读取 R2 图片；R2 未启用时读取 D1 临时媒体图
 - `POST /api/share`：保存分享图并生成分享页
 - `GET /share/:id`：可转发的诗笺分享页
 
 ## 实现进度
 - **P0/P1 已完成（可跑通）**：封面 · 今日签/寻物令(两型/换签/当天未交提醒) · 拍摄→古诗匹配 ·
   明信片/书笺/票券(照片+题诗+落款印+时令) · 诗笺夹 · 知音录 · 打卡日历 · localStorage · 可部署
-- **P1.5 已接入**：Cloudflare 后端骨架 · D1/R2 schema · 用户匿名 ID · 诗笺云同步 · 签账本 · 满签奖励记录 · 补签券账本 · 分享页
+- **P1.5 已接入**：Cloudflare 后端骨架 · D1/R2 schema · D1 临时媒体存储 · 用户匿名 ID · 诗笺云同步 · 签账本 · 满签奖励记录 · 补签券账本 · 分享页
 - **P2 待办**：补签购买入口/奖励投放规则 · 节气印全集上明信片 · 闲章/故人印 · 头部诗人萌化头像 · 信箱寄明信片 ·
   onboarding 三拍 · 诗"换个味道"共创 · Live2D
 

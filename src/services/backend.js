@@ -25,6 +25,32 @@ async function blobToDataUrl(blob) {
   })
 }
 
+async function shrinkImageBlob(blob, { maxWidth = 1080, quality = 0.72 } = {}) {
+  if (typeof document === 'undefined' || typeof Image === 'undefined') return blob
+  if (!blob || blob.size < 900_000) return blob
+  const url = URL.createObjectURL(blob)
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const el = new Image()
+      el.onload = () => resolve(el)
+      el.onerror = reject
+      el.src = url
+    })
+    const scale = Math.min(1, maxWidth / img.naturalWidth)
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.max(1, Math.round(img.naturalWidth * scale))
+    canvas.height = Math.max(1, Math.round(img.naturalHeight * scale))
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+    const shrunk = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality))
+    return shrunk || blob
+  } catch {
+    return blob
+  } finally {
+    URL.revokeObjectURL(url)
+  }
+}
+
 async function api(path, options = {}) {
   const resp = await fetch(path, {
     ...options,
@@ -143,7 +169,8 @@ export async function useMakeupTokenInCloud(dayKey, tokenKey) {
 
 export async function saveShareBlob(blob, meta = {}) {
   try {
-    const imageDataUrl = await blobToDataUrl(blob)
+    const uploadBlob = await shrinkImageBlob(blob)
+    const imageDataUrl = await blobToDataUrl(uploadBlob)
     const data = await api('/api/share', {
       method: 'POST',
       body: JSON.stringify({ ...meta, imageDataUrl }),
